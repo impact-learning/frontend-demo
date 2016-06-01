@@ -1,7 +1,7 @@
 {
-  "name": "react-boilerplate",
-  "version": "3.0.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "name": "demo",
+  "version": "0.1.0",
+  "description": "A demo for impact learning",
   "repository": {
     "type": "git",
     "url": "git://github.com/mxstbr/react-boilerplate.git"
@@ -9,7 +9,7 @@
   "engines" : {
     "npm" : ">=3"
   },
-  "author": "Max Stoiber",
+  "author": "Terrence Lam",
   "license": "MIT",
   "scripts": {
     "npmcheckversion": "node ./internals/scripts/npmcheckversion.js",
