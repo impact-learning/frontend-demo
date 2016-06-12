@@ -73,7 +73,7 @@ a folder called `build`. Upload the contents of `build` to your web server to
 see your work live!
 
 ## Testing
-See the [Testing docs](docs/testing/README.md) for details
+See the [Testing docs](docs/testing) for details
 
 ## Unit testing
 
