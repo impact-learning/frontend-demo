@@ -24,7 +24,7 @@ export default class HomePage extends React.Component {
       <D3Map
         center={center}
         maxZoom={19}
-        defaultZoomLevel={4}
+        defaultZoomLevel={13}
         width={width}
         height={height}
       />
