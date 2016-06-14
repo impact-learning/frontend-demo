@@ -5,6 +5,7 @@ import MapCountryBordersLayer from './map-country-borders-layer';
 class MapOverlay extends React.Component {
   componentDidMount() {
     const { map } = this.props;
+    map.zoomControl.removeFrom(map); // Remove Zoom control
     map.getPanes().overlayPane.appendChild(this.root);
   }
 
