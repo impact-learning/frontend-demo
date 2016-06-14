@@ -14,13 +14,20 @@ import jinxiu from 'data/jinxiu.topo.json';
 import styles from './styles.css';
 import { createStructuredSelector } from 'reselect';
 import topojson from 'topojson';
-
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ActionSearch from 'material-ui/svg-icons/action/search';
+import AutoComplete from 'material-ui/AutoComplete';
+import Paper from 'material-ui/Paper';
 
 export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
     const { bounds } = this.props;
     const center = [35.3174, 104.8535];
+    const projects = [
+      'Jinxiu',
+      'Huangsan',
+    ];
 
     return (
       <div className={styles.impactMap}>
@@ -33,6 +40,16 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
           onViewreset={this.props.onViewreset}
           bounds={bounds}
         />
+        <Paper
+          className={styles.searchBoxContainer}
+        >
+          <ActionSearch />
+          <AutoComplete
+            hintText={'Search for Project'}
+            dataSource={projects}
+            filter={AutoComplete.fuzzyFilter}
+          />
+        </Paper>
       </div>
     );
   }
