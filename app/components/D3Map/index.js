@@ -55,6 +55,7 @@ D3Map.propTypes = {
   maxZoom: React.PropTypes.number,
   zoom: React.PropTypes.number,
   borderData: React.PropTypes.object,
+  projectCoordinates: React.PropTypes.object,
   bounds: React.PropTypes.array,
   onViewreset: React.PropTypes.func,
 };

@@ -1,3 +1,14 @@
 .map {
 
 }
+
+.path {
+  fill: #000;
+  fill-opacity: .05;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.path:hover {
+  fill-opacity: 0.2;
+}

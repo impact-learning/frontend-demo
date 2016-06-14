@@ -10,6 +10,7 @@ import D3Map, { toD3Path } from 'components/D3Map';
 import { updateMap, fitToBounds } from './actions';
 import boundsSelector from './selectors';
 import provinceBordersCHN from 'data/state_chn.topo.json';
+import jinxiu from 'data/jinxiu.topo.json';
 import styles from './styles.css';
 import { createStructuredSelector } from 'reselect';
 import topojson from 'topojson';
@@ -19,7 +20,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
 
   render() {
     const { bounds } = this.props;
-    const center = [24.1037, 109.9943];
+    const center = [35.3174, 104.8535];
 
     return (
       <div className={styles.impactMap}>
@@ -28,6 +29,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
           maxZoom={19}
           zoom={4}
           borderData={provinceBordersCHN}
+          projectCoordinates={jinxiu}
           onViewreset={this.props.onViewreset}
           bounds={bounds}
         />
@@ -49,7 +51,6 @@ function mapDispatchToProps(dispatch) {
   return {
     dispatch,
     onViewreset: (map) => {
-      console.log(`Map Reset: ${map}`);
       dispatch(updateMap(map));
       const provincesGeo = topojson.feature(provinceBordersCHN, provinceBordersCHN.objects.states_chn);
       dispatch(fitToBounds(toD3Path(map).bounds(provincesGeo)));

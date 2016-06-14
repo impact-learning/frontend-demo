@@ -1,5 +1,5 @@
 import React from 'react';
-
+import styles from './styles.css';
 /* eslint-disable react/prefer-stateless-function */
 class MapBorder extends React.Component {
   render() {
@@ -11,6 +11,7 @@ class MapBorder extends React.Component {
       <path
         key="p1"
         d={path(feature)}
+        className={styles.path}
       >
       </path>
     );
