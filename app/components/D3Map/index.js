@@ -6,27 +6,31 @@
 
 import React from 'react';
 import { Map, TileLayer } from 'react-leaflet';
-import CountryTopoData from './data/countries.topo.json';
+import topojson from 'topojson';
 import styles from './styles.css';
 import MapOverlay from './map-overlay';
+import { toD3Path } from './utils';
 
 /* eslint-disable react/prefer-stateless-function */
 class D3Map extends React.Component {
   render() {
     const {
       center,
-      defaultZoomLevel,
+      zoom,
       maxZoom,
+      borderData,
+      onViewreset,
+      bounds,
     } = this.props;
 
-    const mapModel = CountryTopoData;
-
+    // const countriesBorders = topojson.feature(CountryTopoData, CountryTopoData.objects.countries);
+    const provincesGeo = topojson.feature(borderData, borderData.objects.states_chn);
     return (
       <div
         className={styles.map}
       >
         <Map
-          zoom={defaultZoomLevel}
+          zoom={zoom}
           center={center}
           className={styles.map}
         >
@@ -35,7 +39,11 @@ class D3Map extends React.Component {
             maxZoom={maxZoom}
             url="http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png"
           />
-          <MapOverlay mapModel={mapModel} />
+          <MapOverlay
+            provincesGeo={provincesGeo}
+            onViewreset={onViewreset}
+            bounds={bounds}
+          />
         </Map>
       </div>
     );
@@ -45,9 +53,11 @@ class D3Map extends React.Component {
 D3Map.propTypes = {
   center: React.PropTypes.array,
   maxZoom: React.PropTypes.number,
-  defaultZoomLevel: React.PropTypes.number,
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
+  zoom: React.PropTypes.number,
+  borderData: React.PropTypes.object,
+  bounds: React.PropTypes.array,
+  onViewreset: React.PropTypes.func,
 };
 
+export { toD3Path };
 export default D3Map;

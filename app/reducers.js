@@ -38,9 +38,11 @@ function routeReducer(state = routeInitialState, action) {
 /**
  * Creates the main reducer with the asynchronously loaded ones
  */
+import impactMapReducer from 'containers/ImpactMap/reducer';
 export default function createReducer(asyncReducers) {
   return combineReducers({
     route: routeReducer,
+    impactMap: impactMapReducer,
     ...asyncReducers,
   });
 }

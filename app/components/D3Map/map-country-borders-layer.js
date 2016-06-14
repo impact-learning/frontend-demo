@@ -1,31 +1,47 @@
 import React from 'react';
-import d3 from 'd3';
-import topojson from 'topojson';
 import MapBorder from './map-border';
-import L from 'leaflet';
+import { toD3Path } from './utils';
+import isEmpty from 'lodash/isEmpty';
 
 /* eslint-disable react/prefer-stateless-function */
 class MapCountryBordersLayer extends React.Component {
+  constructor() {
+    super();
+    this.updateD3 = this.updateD3.bind(this);
+  }
+  componentWillMount() {
+    const { map } = this.props;
+    this.path = toD3Path(map);
+  }
+
+  componentDidMount() {
+    const { map } = this.props;
+
+    map.on('viewreset', this.updateD3);
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.path = toD3Path(newProps.map);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.bounds !== nextProps.bounds;
+  }
+
+  updateD3(event) {
+    const map = event.target;
+    this.props.onViewreset(map);
+  }
+
   render() {
-    const {
-      map,
-      mapModel,
-    } = this.props;
-    const transform = d3.geo.transform({
-      point(x, y) {
-        const point = map.latLngToLayerPoint(new L.LatLng(y, x));
-        this.stream.point(point.x, point.y);
-      },
-    });
-    const path = d3.geo.path().projection(transform);
-
-    const bounds = path.bounds(topojson.feature(mapModel, mapModel.objects.countries));
-    const topLeft = bounds[0];
-    const bottomRight = bounds[1];
-
+    const { provincesGeo, bounds } = this.props;
+    const theBounds = isEmpty(bounds) ? this.path.bounds(provincesGeo) : bounds;
+    const topLeft = theBounds[0];
+    const bottomRight = theBounds[1];
     return (
       <svg
         className="map-country-borders-layer"
+        ref="svg"
         width={bottomRight[0] - topLeft[0]}
         height={bottomRight[1] - topLeft[1]}
         style={{
@@ -34,11 +50,11 @@ class MapCountryBordersLayer extends React.Component {
         }}
       >
         <g transform={`translate(${-topLeft[0]},${-topLeft[1]})`} className="leaflet-zoom-hide">
-        {topojson.feature(mapModel, mapModel.objects.countries).features.map((feature) =>
+        {provincesGeo.features.map((feature) =>
           (
           <MapBorder
             key={feature.id}
-            path={path}
+            path={this.path}
             feature={feature}
           />
           )
@@ -51,9 +67,9 @@ class MapCountryBordersLayer extends React.Component {
 
 MapCountryBordersLayer.propTypes = {
   map: React.PropTypes.object,
-  mapModel: React.PropTypes.object,
-  width: React.PropTypes.number,
-  height: React.PropTypes.number,
+  bounds: React.PropTypes.array,
+  provincesGeo: React.PropTypes.object,
+  onViewreset: React.PropTypes.func,
 };
 
 export default MapCountryBordersLayer;

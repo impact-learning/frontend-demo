@@ -10,24 +10,16 @@
  */
 
 import React from 'react';
-import D3Map from 'components/D3Map';
+import { Link } from 'react-router';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class HomePage extends React.Component {
 
   render() {
-    const center = [24.1037, 109.9943];
-    const width = 960;
-    const height = 776;
-
     return (
-      <D3Map
-        center={center}
-        maxZoom={19}
-        defaultZoomLevel={13}
-        width={width}
-        height={height}
-      />
+      <div>
+        <Link to="/impactMap">Map</Link>
+      </div>
     );
   }
 }
