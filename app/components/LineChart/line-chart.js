@@ -32,7 +32,6 @@ class LineChart extends React.Component {
     .attr('shape-rendering', 'crispEdges');
     d3.select(this.root).call(this.brush)
     .selectAll('rect')
-    .attr('transform', `translate(${20}, ${0})`)
     .attr('opacity', 0.125)
     .attr('stroke', '#fff')
     .attr('shape-rendering', 'crispEdges')
@@ -149,10 +148,10 @@ class LineChart extends React.Component {
             }
           }
           height={height + margin.top + margin.bottom}
-          width={width + margin.left + margin.right}
+          width={width}
         >
           <g
-            transform={`translate(${margin.left}, ${margin.top})`}
+            transform={`translate(${0}, ${margin.top})`}
           >
             {
               <path
@@ -168,7 +167,7 @@ class LineChart extends React.Component {
                 return g;
               }
             }
-            transform={`translate(${margin.left},${margin.top + height})`}
+            transform={`translate(${0},${margin.top + height})`}
           >
           </g>
         </svg>

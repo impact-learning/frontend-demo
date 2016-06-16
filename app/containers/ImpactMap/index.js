@@ -18,7 +18,7 @@ import ActionSearch from 'material-ui/svg-icons/action/search';
 import AutoComplete from 'material-ui/AutoComplete';
 import Paper from 'material-ui/Paper';
 import LineChart from 'components/LineChart';
-
+import ContainerDimensions from 'react-container-dimensions';
 
 export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -41,11 +41,16 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
           onViewreset={this.props.onViewreset}
           bounds={bounds}
         />
-        <LineChart
-          width={980}
-          height={80}
-          className={styles.brush}
-        />
+        <ContainerDimensions>
+        {
+          ({ width }) =>
+            <LineChart
+              width={width}
+              height={80}
+              className={styles.brush}
+            />
+        }
+        </ContainerDimensions>
         <Paper
           className={styles.searchBoxContainer}
         >
