@@ -1,0 +1,49 @@
+.ID {
+    float: center;
+    position: absolute;;
+  	top: 470px;
+  	left: 550px;
+  	padding: 40px;
+}
+.Password {
+    float: center;
+    position: absolute;;
+  	top: 530px;
+  	left: 344px;
+  	padding: 0px 6px;
+
+}
+
+.Button{
+	float: center;
+    position: absolute;;
+  	top: 620px;
+  	left: 620px;
+  	padding: 0px 6px;
+
+}
+
+
+.LoginContainer{
+	width: 1000px;
+    height: 500px;
+}
+
+
+.searchBar{
+	position: absolute;;
+  	top: 330px;
+  	left: 560px;
+  	padding: 40px;
+	
+}
+
+
+.searchIcon{
+	position: absolute;;
+  	top: 330px;
+  	left: 530px;
+  	padding: 40px;
+	
+}
+
