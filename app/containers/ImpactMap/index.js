@@ -14,10 +14,11 @@ import jinxiu from 'data/jinxiu.topo.json';
 import styles from './styles.css';
 import { createStructuredSelector } from 'reselect';
 import topojson from 'topojson';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import AutoComplete from 'material-ui/AutoComplete';
 import Paper from 'material-ui/Paper';
+import LineChart from 'components/LineChart';
+import ContainerDimensions from 'react-container-dimensions';
 
 export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -40,6 +41,16 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
           onViewreset={this.props.onViewreset}
           bounds={bounds}
         />
+        <ContainerDimensions>
+        {
+          ({ width }) =>
+            <LineChart
+              width={width}
+              height={80}
+              className={styles.brush}
+            />
+        }
+        </ContainerDimensions>
         <Paper
           className={styles.searchBoxContainer}
         >
