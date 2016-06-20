@@ -1,0 +1,26 @@
+.ID {
+    float: center;
+    position: absolute;;
+  	top: 470px;
+  	left: 550px;
+  	padding: 40px;
+}
+
+
+.searchBar{
+	position: absolute;;
+  	top: 330px;
+  	left: 560px;
+  	padding: 40px;
+	
+}
+
+
+.searchIcon{
+	position: absolute;;
+  	top: 330px;
+  	left: 530px;
+  	padding: 40px;
+	
+}
+
