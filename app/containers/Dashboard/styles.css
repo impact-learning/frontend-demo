@@ -1,0 +1,19 @@
+.dashboard {
+
+}
+
+.smallIcon {
+    
+    position: absolute;;
+    top: 300px;
+    left: 560px;
+}
+
+.medium {
+    width: 96px;
+    height: 96px;
+    padding: 24px;
+    position: absolute;;
+    top: 300px;
+    left: 560px;
+}
