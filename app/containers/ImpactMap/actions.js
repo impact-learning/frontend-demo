@@ -7,7 +7,7 @@
 import {
   UPDATE_MAP,
   FIT_TO_BOUNDS,
-  ADD_COUNTY,
+  ADD_VILLAGES,
 } from './constants';
 
 export function updateMap(map) {
@@ -24,9 +24,9 @@ export function fitToBounds(bounds) {
   };
 }
 
-export function addCounty(county) {
+export function addVillages(villages) {
   return {
-    type: ADD_COUNTY,
-    county,
+    type: ADD_VILLAGES,
+    villages,
   };
 }

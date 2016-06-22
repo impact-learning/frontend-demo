@@ -7,7 +7,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import D3Map, { toD3Path } from 'components/D3Map';
-import { updateMap, fitToBounds, addCounty } from './actions';
+import { updateMap, fitToBounds, addVillages } from './actions';
 import boundsSelector from './selectors';
 import provinceBordersCHN from 'data/state_chn.topo.json';
 import jinxiu from 'data/jinxiu.topo.json';
@@ -30,10 +30,9 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
     socket.on('search response', this.onSearchResponse);
   }
 
-  onSearchResponse(county) {
-    console.log(county);
-    const { updateCounties } = this.props;
-    updateCounties(county);
+  onSearchResponse(villages) {
+    const { updateVillages } = this.props;
+    updateVillages(villages);
   }
 
   render() {
@@ -85,11 +84,12 @@ ImpactMap.propTypes = {
   onViewreset: React.PropTypes.func,
   bounds: React.PropTypes.array,
   onSearch: React.PropTypes.func,
-  updateCounties: React.PropTypes.func,
+  updateVillages: React.PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   bounds: boundsSelector(),
+  // villages: villagesSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -105,8 +105,8 @@ function mapDispatchToProps(dispatch) {
         county,
       });
     },
-    updateCounties: (county) => {
-      dispatch(addCounty(county));
+    updateVillages: (villages) => {
+      dispatch(addVillages(villages));
     },
   };
 }

@@ -4,18 +4,18 @@
  *
  */
 
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import {
   UPDATE_MAP,
   FIT_TO_BOUNDS,
-  ADD_COUNTY,
+  ADD_VILLAGES,
 } from './constants';
 
 const initialState = fromJS({
   zoom: 0,
   center: [],
   bounds: [],
-  counties: {},
+  villages: {},
 });
 
 function impactMapReducer(state = initialState, action) {
@@ -31,10 +31,11 @@ function impactMapReducer(state = initialState, action) {
       return state.merge({ bounds: action.bounds });
     }
 
-    case ADD_COUNTY: {
-      const county = fromJS(action.county);
-      return state.update('counties', counties =>
-        counties.set(`${county.get('township')}${county.get('village')}`, county));
+    case ADD_VILLAGES: {
+      const villages = action.villages.reduce((v, json) =>
+        v.set(`${json.township}${json.village}`, fromJS(json)), Map() // eslint-disable-line new-cap
+      );
+      return state.update('villages', () => villages);
     }
 
     default:
