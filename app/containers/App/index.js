@@ -12,6 +12,7 @@
  */
 
 import React from 'react';
+import socket from 'utils/socketio';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class App extends React.Component {
@@ -19,6 +20,15 @@ export default class App extends React.Component {
   static propTypes = {
     children: React.PropTypes.node,
   };
+
+  componentDidMount() {
+    socket.on('connect', this.onConnect);
+  }
+
+  onConnect() {
+    console.log('Connected to server');
+    socket.emit('my event', 'yea');
+  }
 
   render() {
     return (

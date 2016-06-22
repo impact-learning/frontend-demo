@@ -182,6 +182,7 @@
     "redux-saga": "^0.10.0",
     "reselect": "^2.5.1",
     "sanitize.css": "^3.3.0",
+    "socket.io-client": "^1.4.6",
     "topojson": "^1.6.26",
     "whatwg-fetch": "^1.0.0"
   },

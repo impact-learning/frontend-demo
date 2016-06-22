@@ -7,7 +7,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import D3Map, { toD3Path } from 'components/D3Map';
-import { updateMap, fitToBounds } from './actions';
+import { updateMap, fitToBounds, addCounty } from './actions';
 import boundsSelector from './selectors';
 import provinceBordersCHN from 'data/state_chn.topo.json';
 import jinxiu from 'data/jinxiu.topo.json';
@@ -19,11 +19,25 @@ import AutoComplete from 'material-ui/AutoComplete';
 import Paper from 'material-ui/Paper';
 import LineChart from 'components/LineChart';
 import ContainerDimensions from 'react-container-dimensions';
+import socket from 'utils/socketio';
 
 export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor() {
+    super();
+    this.onSearchResponse = this.onSearchResponse.bind(this);
+  }
+  componentDidMount() {
+    socket.on('search response', this.onSearchResponse);
+  }
+
+  onSearchResponse(county) {
+    console.log(county);
+    const { updateCounties } = this.props;
+    updateCounties(county);
+  }
 
   render() {
-    const { bounds } = this.props;
+    const { bounds, onSearch } = this.props;
     const center = [35.3174, 104.8535];
     const projects = [
       'Jinxiu',
@@ -59,6 +73,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
             hintText={'Search for Project'}
             dataSource={projects}
             filter={AutoComplete.fuzzyFilter}
+            onNewRequest={onSearch}
           />
         </Paper>
       </div>
@@ -69,6 +84,8 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
 ImpactMap.propTypes = {
   onViewreset: React.PropTypes.func,
   bounds: React.PropTypes.array,
+  onSearch: React.PropTypes.func,
+  updateCounties: React.PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -82,6 +99,14 @@ function mapDispatchToProps(dispatch) {
       dispatch(updateMap(map));
       const provincesGeo = topojson.feature(provinceBordersCHN, provinceBordersCHN.objects.states_chn);
       dispatch(fitToBounds(toD3Path(map).bounds(provincesGeo)));
+    },
+    onSearch: (county) => {
+      socket.emit('search county', {
+        county,
+      });
+    },
+    updateCounties: (county) => {
+      dispatch(addCounty(county));
     },
   };
 }
