@@ -123,7 +123,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
             <div className={styles.impactMap}>
               <D3Map
                 width={width}
-                height={this.height * 0.65}
+                height={this.height * 0.55}
                 center={center}
                 maxZoom={19}
                 zoom={4}
