@@ -10,6 +10,7 @@ import {
   ADD_VILLAGES,
   UPDATE_BOUNDS_FOR_ZOOM,
   UPDATE_CURRENT_YEAR,
+  TOGGLE_DRAWER,
 } from './constants';
 
 export function updateMap(map) {
@@ -44,5 +45,12 @@ export function updateCurrentYear(year) {
   return {
     type: UPDATE_CURRENT_YEAR,
     year,
+  };
+}
+
+
+export function toggleDrawer() {
+  return {
+    type: TOGGLE_DRAWER,
   };
 }

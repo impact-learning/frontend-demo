@@ -8,6 +8,11 @@
 
 }
 
+.home {
+  padding-top: 20%;
+  position: relative;
+}
+
 
 .searchBar{
 
@@ -15,7 +20,7 @@
   top: 300px;
   left: 560px;
   padding: 40px;
-  
+
 
 }
 
@@ -26,7 +31,6 @@
   top: 370px;
   left: 530px;
   padding: 40px;
-	
+
 
 }
-

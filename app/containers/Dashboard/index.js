@@ -7,37 +7,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import selectDashboard from './selectors';
-import styles from './styles.css';
-import AppBar from 'material-ui/AppBar';
-import {Card, CardActions, CardHeader, CardText, CardTitle} from 'material-ui/Card';
+// import styles from './styles.css';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import IconButton from 'material-ui/IconButton';
-import ActionHome from 'material-ui/svg-icons/action/home';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import Divider from 'material-ui/Divider';
-import { render } from 'react-dom';
-import { VictoryPie } from 'victory';
-import { VictoryChart } from 'victory';
-import { VictoryBar } from 'victory';
-import { VictoryStack } from 'victory';
-import { VictoryLine } from 'victory';
-import { VictoryAxis } from 'victory';
-import Subheader from 'material-ui/Subheader';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import {GridList, GridTile} from 'material-ui/GridList';
-import Drawer from 'material-ui/Drawer';
+import {
+  VictoryPie,
+  VictoryChart,
+  VictoryBar,
+  VictoryLine,
+  VictoryAxis,
+} from 'victory';
+import { GridList, GridTile } from 'material-ui/GridList';
 
 
 export class Dashboard extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    this.state = {open: false};
+    this.state = { open: false };
   }
-  handleToggle = () => this.setState({open: !this.state.open});
-  handleClose = () => this.setState({open: false});
+  handleToggle = () => this.setState({ open: !this.state.open });
+  handleClose = () => this.setState({ open: false });
   render() {
     const styles = {
       smallIcon: {
@@ -78,53 +67,20 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
         width: 2000,
         height: 370,
         overflowY: 'auto',
-        marginBottom: 0,       
+        marginBottom: 0,
       },
     };
     return (
       <div className={styles.dashboard}>
-        <AppBar
-          title="Impact Learning Dashboard"
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
-          onLeftIconButtonTouchTap={this.handleToggle}
-          iconElementRight={
-            <IconMenu
-              iconButtonElement={
-                <IconButton><MoreVertIcon /></IconButton>
-              }
-              targetOrigin={{horizontal: 'right', vertical: 'top'}}
-              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-            >
-              <MenuItem primaryText="Refresh" />
-              <MenuItem primaryText="Help" />
-              <Divider />
-              <MenuItem primaryText="Log out" href={'http://localhost:3000'}/>
-            </IconMenu>
-          }
-        />
-
-        <Drawer
-          docked={false}
-          width={200}
-          open={this.state.open}
-          onRequestChange={(open) => this.setState({open})}
-        >
-          <MenuItem onTouchTap={this.handleClose}>Input 投入绩效</MenuItem>
-          <MenuItem onTouchTap={this.handleClose}>Activity 活动绩效</MenuItem>
-          <MenuItem onTouchTap={this.handleClose}>Output 产出绩效</MenuItem>
-          <MenuItem onTouchTap={this.handleClose}>Outcome 结果绩效</MenuItem>
-          <MenuItem onTouchTap={this.handleClose}>Impact 影响力绩效</MenuItem>
-        </Drawer>
-
-        <Card initiallyExpanded={true}>
+        <Card initiallyExpanded>
           <CardHeader
             title="Input 投入绩效"
             subtitle=""
-            actAsExpander={true}
-            showExpandableButton={true}
+            actAsExpander
+            showExpandableButton
             titleColor="00CCFF"
           />
-          <CardText expandable={true} >
+          <CardText expandable >
             <div style={styles.root}>
               <GridList
                 cellHeight={360}
@@ -132,15 +88,15 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                 cols={3}
               >
                 <GridTile>
-                  <Card initiallyExpanded={true}>
+                  <Card initiallyExpanded>
                     <CardHeader
-                      title="总投入"                       
-                      actAsExpander={true}
-                      showExpandableButton={true}
+                      title="总投入"
+                      actAsExpander
+                      showExpandableButton
                     />
-                    <CardText 
-                      expandable={true}
-                      style={{fontSize: 45}}
+                    <CardText
+                      expandable
+                      style={{ fontSize: 45 }}
                     >
                       <h1>2.47百万</h1>
                     </CardText>
@@ -148,92 +104,64 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                 </GridTile>
                 <GridTile>
                   <card>
-                     <CardHeader
-                      title="植茶树数目"                     
+                    <CardHeader
+                      title="植茶树数目"
                     />
-                    <VictoryChart 
-                      domainPadding={{x: 30, y: 30}}
-                      height={350} 
+                    <VictoryChart
+                      domainPadding={{ x: 30, y: 30 }}
+                      height={350}
                       width={500}
-                      events={[{
-                        childName: "bar",
-                        target: "data",
-                        eventHandlers: {
-                          onClick: () => {
-                            return [
-                              {
-                                target: "labels",
-                                eventKey: [2015, 2020, 2025],
-                                mutation: () => {
-                                  return {text: "WOW"};
-                                }
-                              }, {
-                                childName: "line",
-                                target: "data",
-                                mutation: (props) => {
-                                  return {style: {stroke: "lime", strokeWidth:  5}};
-                                }
-                              }, {
-                                childName: "line",
-                                target: "labels",
-                                mutation: () => {
-                                  return {text: "LINE"};
-                                }
-                              }
-                            ];
-                          }
-                        }
-                      }]}
                     >
-                    <VictoryBar name="bar"
-                      style={{
-                        data: {width: 15, fill: "Grey"},
-                        labels: {fontSize: 20}
-                      }}
-                      data={[
-                        {x: 2010, y: 8.1},
-                        {x: 2011, y: 8.5},
-                        {x: 2012, y: 8.6},
-                        {x: 2013, y: 9.0},
-                        {x: 2014, y: 9.1},
-                        {x: 2015, y: 9.6},
-                        {x: 2016, y: 11.2}, 
-                      ]}
-                    />
-                    <VictoryLine name="line"
-                      data={[
-                        {x: 2010, y: 8.1},
-                        {x: 2011, y: 8.5},
-                        {x: 2012, y: 8.6},
-                        {x: 2013, y: 9.0},
-                        {x: 2014, y: 9.1},
-                        {x: 2015, y: 9.6},
-                        {x: 2016, y: 11.2}
-                      ]}
-                      style={{
-                        data: {stroke: "DarkTurquoise"},
-                        labels: {fontSize: 20}
-                      }}
-                    />
-                    <VictoryAxis 
-                      tickFormat={
-                        x => x
-                      }
-                    />
-                    <VictoryAxis dependentAxis
+                      <VictoryBar
+                        name="bar"
+                        style={{
+                          data: { width: 15, fill: 'Grey' },
+                          labels: { fontSize: 20 },
+                        }}
+                        data={[
+                          { x: 2010, y: 8.1 },
+                          { x: 2011, y: 8.5 },
+                          { x: 2012, y: 8.6 },
+                          { x: 2013, y: 9.0 },
+                          { x: 2014, y: 9.1 },
+                          { x: 2015, y: 9.6 },
+                          { x: 2016, y: 11.2 },
+                        ]}
+                      />
+                      <VictoryLine
+                        name="line"
+                        data={[
+                          { x: 2010, y: 8.1 },
+                          { x: 2011, y: 8.5 },
+                          { x: 2012, y: 8.6 },
+                          { x: 2013, y: 9.0 },
+                          { x: 2014, y: 9.1 },
+                          { x: 2015, y: 9.6 },
+                          { x: 2016, y: 11.2 },
+                        ]}
+                        style={{
+                          data: { stroke: 'DarkTurquoise' },
+                          labels: { fontSize: 20 },
+                        }}
+                      />
+                      <VictoryAxis
+                        tickFormat={
+                          x => x
+                        }
+                      />
+                      <VictoryAxis
+                        dependentAxis
                         padding={75}
                         label="y-axis"
-                        standalone={false}/>
+                        standalone={false}
+                      />
                     </VictoryChart>
-
-
-
                   </card>
                 </GridTile>
                 <GridTile>
                   <Card>
                     <CardHeader
-                      title="茶树木品种"                        
+                      title="茶树木品种"
                     />
                     <CardText>
                       <VictoryPie
@@ -250,20 +178,20 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                       />
                     </CardText>
                   </Card>
-                </GridTile>                 
+                </GridTile>
               </GridList>
             </div>
           </CardText>
         </Card>
 
-        <Card initiallyExpanded={true}>
+        <Card initiallyExpanded>
           <CardHeader
             title="Activity 活动绩效"
             subtitle=""
-            actAsExpander={true}
-            showExpandableButton={true}
+            actAsExpander
+            showExpandableButton
           />
-          <CardText expandable={true}>
+          <CardText expandable>
             <div style={styles.root}>
               <GridList
                 cellHeight={350}
@@ -271,15 +199,15 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                 cols={3}
               >
                 <GridTile>
-                  <Card initiallyExpanded={true}>
+                  <Card initiallyExpanded>
                     <CardHeader
-                      title="树木存活"                   
-                      actAsExpander={true}
-                      showExpandableButton={true}
+                      title="树木存活"
+                      actAsExpander
+                      showExpandableButton
                     />
                     <CardText
-                      expandable={true}
-                      style={{fontSize: 50}}
+                      expandable
+                      style={{ fontSize: 50 }}
                     >
                       <h1>98.8 %</h1>
                     </CardText>
@@ -291,9 +219,9 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                       title="树数目"
                     />
                     <CardText>
-                        <VictoryChart 
+                        <VictoryChart
                         domainPadding={{x: 30, y: 30}}
-                        height={350} 
+                        height={350}
                         width={500}
                         events={[{
                           childName: "bar",
@@ -338,10 +266,10 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                           {x: 2013, y: 9.0},
                           {x: 2014, y: 9.1},
                           {x: 2015, y: 9.6},
-                          {x: 2016, y: 11.2}                  
+                          {x: 2016, y: 11.2}
                         ]}
                       />
-                      <VictoryLine name="line"                 
+                      <VictoryLine name="line"
                         data={[
                           {x: 2010, y: 8.1},
                           {x: 2011, y: 8.5},
@@ -349,7 +277,7 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                           {x: 2013, y: 9.0},
                           {x: 2014, y: 9.1},
                           {x: 2015, y: 9.6},
-                          {x: 2016, y: 11.2}  
+                          {x: 2016, y: 11.2}
                         ]}
                         style={{
                           data: {stroke: "DarkTurquoise "},
@@ -357,7 +285,7 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
 
                         }}
                       />
-                      <VictoryAxis 
+                      <VictoryAxis
                         tickFormat={
                           x => x
                         }
@@ -405,10 +333,10 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
           <CardHeader
             title="Output 产出绩效"
             subtitle=""
-            actAsExpander={true}
-            showExpandableButton={true}
+            actAsExpander
+            showExpandableButton
           />
-          <CardText expandable={true}>
+          <CardText expandable>
             <div style={styles.root}>
               <GridList
                 cellHeight={350}
@@ -416,14 +344,14 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                 cols={3}
               >
                 <GridTile>
-                  <Card initiallyExpanded={true}>
+                  <Card initiallyExpanded>
                     <CardHeader
-                      title="树木存活"                   
-                      actAsExpander={true}
-                      showExpandableButton={true}
+                      title="树木存活"
+                      actAsExpander
+                      showExpandableButton
                     />
                     <CardText
-                      expandable={true}
+                      expandable
                       style={{fontSize: 50}}
                     >
                       <h1>98.8 %</h1>
@@ -433,7 +361,7 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                 <GridTile>
                   <Card>
                     <CardHeader
-                      title="茶树品种"                      
+                      title="茶树品种"
                     />
                     <CardText>
                       <VictoryChart
@@ -492,27 +420,21 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
               </GridList>
             </div>
           </CardText>
-          <CardActions expandable={true}>
+          <CardActions expandable>
             <FlatButton label="Action1" />
             <FlatButton label="Action2" />
           </CardActions>
         </Card>
-
-
-
-
-
-
         <Card>
           <CardHeader
             title="Outcome 结果绩效"
             subtitle=""
-            actAsExpander={true}
-            showExpandableButton={true}
+            actAsExpander
+            showExpandableButton
           />
-          <CardText expandable={true}>
+          <CardText expandable>
           </CardText>
-          <CardActions expandable={true}>
+          <CardActions expandable>
             <FlatButton label="Action1" />
             <FlatButton label="Action2" />
           </CardActions>
@@ -521,10 +443,10 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
           <CardHeader
             title="Impact 影响力绩效"
             subtitle=""
-            actAsExpander={true}
-            showExpandableButton={true}
+            actAsExpander
+            showExpandableButton
           />
-          <CardText expandable={true}>
+          <CardText expandable>
             <div style={styles.root}>
                 <GridList
                   cellHeight={360}
@@ -532,13 +454,13 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                   cols={3}
                 >
                   <GridTile>
-                    <Card initiallyExpanded={true}>
+                    <Card initiallyExpanded>
                       <CardHeader
-                        title="总投入"                       
-                        actAsExpander={true}
-                        showExpandableButton={true}
+                        title="总投入"
+                        actAsExpander
+                        showExpandableButton
                       />
-                      <CardText expandable={true}>   
+                      <CardText expandable>
                         2.47百万
                       </CardText>
                     </Card>
@@ -546,11 +468,11 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                   <GridTile>
                     <card>
                       <CardHeader
-                        title="Title"                        
+                        title="Title"
                       />
-                      <VictoryChart 
+                      <VictoryChart
                         domainPadding={{x: 30, y: 30}}
-                        height={350} 
+                        height={350}
                         width={500}
                         events={[{
                           childName: "bar",
@@ -630,7 +552,7 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                   <GridTile>
                     <Card>
                       <CardHeader
-                        title="Title"                        
+                        title="Title"
                       />
                       <CardText>
                         <VictoryPie
@@ -647,7 +569,7 @@ export class Dashboard extends React.Component { // eslint-disable-line react/pr
                         />
                       </CardText>
                     </Card>
-                  </GridTile>                 
+                  </GridTile>
                 </GridList>
               </div>
           </CardText>
