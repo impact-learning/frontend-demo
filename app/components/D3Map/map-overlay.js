@@ -13,7 +13,9 @@ class MapOverlay extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { boundsForZoom } = nextProps;
-    if (boundsForZoom.length) {
+    if (boundsForZoom.length &&
+      this.props.boundsForZoom !== nextProps.boundsForZoom
+    ) {
       const { map } = this.props;
       map.fitBounds(boundsForZoom);
     }
@@ -42,7 +44,7 @@ class MapOverlay extends React.Component {
           <CircleMarker
             key={`${[d.coordinates[1], d.coordinates[0]]}`}
             center={[d.coordinates[1], d.coordinates[0]]}
-            radius={20}
+            radius={d.score}
             color="green"
             {...this.props}
           />
