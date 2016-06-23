@@ -22,6 +22,10 @@ import isEmpty from 'lodash/isEmpty';
 import L from 'leaflet';
 // import { LineChart, XAxis, Line, Tooltip } from 'recharts';
 import { VictoryChart, VictoryLine, VictoryScatter } from 'victory';
+import IconButton from 'material-ui/IconButton';
+import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
+import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
+import { browserHistory } from 'react-router';
 
 import {
   updateMap,
@@ -59,6 +63,10 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
   onSearchResponse(villages) {
     const { updateVillages } = this.props;
     updateVillages(villages);
+  }
+
+  onClickCircle(e) {
+    console.log(e);
   }
 
   prepareData() {
@@ -117,7 +125,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
             <div className={styles.impactMap}>
               <D3Map
                 width={width}
-                height={this.height * 0.7}
+                height={this.height * 0.65}
                 center={center}
                 maxZoom={19}
                 zoom={4}
@@ -127,10 +135,11 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                 bounds={bounds}
                 impactData={d}
                 boundsForZoom={boundsForZoom}
+                onClickCircle={console.log('OMG')}
               />
               <VictoryChart
                 width={width}
-                height={this.height * 0.2}
+                height={this.height * 0.15}
                 events={
                   [{
                     taget: 'label',
@@ -166,6 +175,45 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                   onNewRequest={onSearch}
                 />
               </Paper>
+              <IconButton
+                style={{
+                  display: 'block',
+                  position: 'absolute',
+                  top: '40%',
+                  width: 80,
+                  height: 80,
+                  padding: 0,
+                }}
+                iconStyle={{
+                  width: 80,
+                  height: 80,
+                }}
+                onClick={() => browserHistory.push('dashboard')}
+              >
+                <ArrowLeft
+                  color="#00BCD4"
+                />
+              </IconButton>
+              <IconButton
+                style={{
+                  display: 'block',
+                  position: 'absolute',
+                  top: '40%',
+                  right: 0,
+                  width: 80,
+                  height: 80,
+                  padding: 0,
+                }}
+                iconStyle={{
+                  width: 80,
+                  height: 80,
+                }}
+                onClick={() => browserHistory.push('dashboard')}
+              >
+                <ArrowRight
+                  color="#00BCD4"
+                />
+              </IconButton>
             </div>
         }
       </ContainerDimensions>
@@ -215,7 +263,6 @@ function mapDispatchToProps(dispatch) {
       ]));
     },
     onClickOnChart: (item) => {
-      console.log(item);
       const i = parseInt(item.key.split('-')[1], 10);
       dispatch(updateCurrentYear(2009 + i));
     },

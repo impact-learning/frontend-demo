@@ -1,10 +1,10 @@
 .impactMap {
-
+  position: relative;
 }
 
 .searchBoxContainer {
   float: left;
-  position: absolute;;
+  position: absolute;
   top: 10px;
   left: 10px;
   padding: 0px 6px;
@@ -12,4 +12,16 @@
 
 .brush {
   width: 100%;
+}
+
+.leftArrow {
+  display: block;
+  position: absolute;
+  top: 50%;
+}
+
+.rightArrow {
+  display: block;
+  position: absolute;
+  top: 50%;
 }
