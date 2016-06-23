@@ -13,6 +13,7 @@
 
 import React from 'react';
 import socket from 'utils/socketio';
+import AppBar from 'material-ui/AppBar';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class App extends React.Component {
@@ -33,6 +34,10 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
+        <AppBar
+          title="Title"
+          iconClassNameRight="muidocs-icon-navigation-expand-more"
+        />
         {this.props.children}
       </div>
     );
