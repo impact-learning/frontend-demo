@@ -1,7 +1,8 @@
 import React from 'react';
-import MapCountryBordersLayer from './map-country-borders-layer';
-import { CircleMarker } from 'react-leaflet';
-
+// import MapCountryBordersLayer from './map-country-borders-layer';
+import { CircleMarker, Popup } from 'react-leaflet';
+import { PieChart, Pie, Tooltip } from 'recharts';
+import d3 from 'd3';
 
 /* eslint-disable react/prefer-stateless-function */
 class MapOverlay extends React.Component {
@@ -37,9 +38,6 @@ class MapOverlay extends React.Component {
           }
         }
       >
-        <MapCountryBordersLayer
-          {...this.props}
-        />
         {impactData.map(d =>
           <CircleMarker
             key={`${[d.coordinates[1], d.coordinates[0]]}`}
@@ -47,7 +45,29 @@ class MapOverlay extends React.Component {
             radius={d.score}
             color="green"
             {...this.props}
-          />
+          >
+            <Popup>
+              <div>
+                <span>Average Income (%)</span>
+                <PieChart
+                  width={300} height={200}
+                >
+                  <Pie
+                    data={
+                      Object.keys(d.income).map(k => ({
+                        name: k,
+                        value: d3.round(d.income[k] * 100, 2),
+                      }))
+                    }
+                    outerRadius={60}
+                    fill="#8884d8"
+                    label
+                  />
+                  <Tooltip />
+                </PieChart>
+              </div>
+            </Popup>
+          </CircleMarker>
         )}
       </div>
     );
