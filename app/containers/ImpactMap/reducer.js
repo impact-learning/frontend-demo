@@ -9,6 +9,7 @@ import {
   UPDATE_MAP,
   FIT_TO_BOUNDS,
   ADD_VILLAGES,
+  UPDATE_BOUNDS_FOR_ZOOM,
 } from './constants';
 
 const initialState = fromJS({
@@ -16,6 +17,7 @@ const initialState = fromJS({
   center: [],
   bounds: [],
   villages: {},
+  boundsForZoom: [],
 });
 
 function impactMapReducer(state = initialState, action) {
@@ -36,6 +38,12 @@ function impactMapReducer(state = initialState, action) {
         v.set(`${json.township}${json.village}`, fromJS(json)), Map() // eslint-disable-line new-cap
       );
       return state.update('villages', () => villages);
+    }
+
+    case UPDATE_BOUNDS_FOR_ZOOM: {
+      return state.merge({
+        boundsForZoom: action.bounds,
+      });
     }
 
     default:

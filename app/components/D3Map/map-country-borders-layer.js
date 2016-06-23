@@ -1,7 +1,7 @@
 import React from 'react';
 import MapBorder from './map-border';
 import { toD3Path } from './utils';
-import isEmpty from 'lodash/isEmpty';
+// import isEmpty from 'lodash/isEmpty';
 
 /* eslint-disable react/prefer-stateless-function */
 class MapCountryBordersLayer extends React.Component {
@@ -35,7 +35,7 @@ class MapCountryBordersLayer extends React.Component {
 
   render() {
     const { provincesGeo, bounds } = this.props;
-    const theBounds = isEmpty(bounds) ? this.path.bounds(provincesGeo) : bounds;
+    const theBounds = bounds.size ? bounds : this.path.bounds(provincesGeo);
     const topLeft = theBounds[0];
     const bottomRight = theBounds[1];
     return (
