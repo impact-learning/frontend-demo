@@ -7,8 +7,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import D3Map, { toD3Path } from 'components/D3Map';
-import { updateMap, fitToBounds, addCounty } from './actions';
-import boundsSelector from './selectors';
 import provinceBordersCHN from 'data/state_chn.topo.json';
 import jinxiu from 'data/jinxiu.topo.json';
 import styles from './styles.css';
@@ -20,6 +18,20 @@ import Paper from 'material-ui/Paper';
 import LineChart from 'components/LineChart';
 import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
+import isEmpty from 'lodash/isEmpty';
+import L from 'leaflet';
+
+import {
+  updateMap,
+  fitToBounds,
+  addVillages,
+  updateBoundsForZoom,
+} from './actions';
+import {
+  boundsSelector,
+  villagesSelector,
+  boundsForZoomSelector,
+} from './selectors';
 
 export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
@@ -30,20 +42,27 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
     socket.on('search response', this.onSearchResponse);
   }
 
-  onSearchResponse(county) {
-    console.log(county);
-    const { updateCounties } = this.props;
-    updateCounties(county);
+  onSearchResponse(villages) {
+    const { updateVillages } = this.props;
+    updateVillages(villages);
   }
 
   render() {
-    const { bounds, onSearch } = this.props;
+    const {
+      bounds,
+      onSearch,
+      villages,
+      boundsForZoom,
+    } = this.props;
+
     const center = [35.3174, 104.8535];
     const projects = [
       'Jinxiu',
       'Huangsan',
     ];
-
+    const d = isEmpty(villages) ? [{
+      coordinates: [110.18394058186335, 24.13800001458207],
+    }] : Object.keys(villages).map(key => villages[key]);
     return (
       <div className={styles.impactMap}>
         <D3Map
@@ -54,6 +73,8 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
           projectCoordinates={jinxiu}
           onViewreset={this.props.onViewreset}
           bounds={bounds}
+          impactData={d}
+          boundsForZoom={boundsForZoom}
         />
         <ContainerDimensions>
         {
@@ -84,12 +105,16 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
 ImpactMap.propTypes = {
   onViewreset: React.PropTypes.func,
   bounds: React.PropTypes.array,
+  villages: React.PropTypes.object,
+  boundsForZoom: React.PropTypes.array,
   onSearch: React.PropTypes.func,
-  updateCounties: React.PropTypes.func,
+  updateVillages: React.PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   bounds: boundsSelector(),
+  villages: villagesSelector(),
+  boundsForZoom: boundsForZoomSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -105,8 +130,15 @@ function mapDispatchToProps(dispatch) {
         county,
       });
     },
-    updateCounties: (county) => {
-      dispatch(addCounty(county));
+    updateVillages: (villages) => {
+      dispatch(addVillages(villages));
+      const latLngs = Object.keys(villages).map(k => L.latLng(villages[k].coordinates[1], villages[k].coordinates[0]));
+      const bounds = L.latLngBounds(latLngs);
+
+      dispatch(updateBoundsForZoom([
+        [bounds._southWest.lat, bounds._southWest.lng], // eslint-disable-line no-underscore-dangle
+        [bounds._northEast.lat, bounds._northEast.lng], // eslint-disable-line no-underscore-dangle
+      ]));
     },
   };
 }
