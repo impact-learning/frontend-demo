@@ -38,12 +38,14 @@ function routeReducer(state = routeInitialState, action) {
 /**
  * Creates the main reducer with the asynchronously loaded ones
  */
+import homeReducer from 'containers/HomePage/reducer';
 import impactMapReducer from 'containers/ImpactMap/reducer';
 import dashboardReducer from 'containers/Dashboard/reducer';
 import predictionReducer from 'containers/Prediction/reducer';
 export default function createReducer(asyncReducers) {
   return combineReducers({
     route: routeReducer,
+    home: homeReducer,
     impactMap: impactMapReducer,
     dashboard: dashboardReducer,
     prediction: predictionReducer,

@@ -37,10 +37,17 @@ const currentYearSelector = () => createSelector(
 );
 
 
+const drawerOpenedSelector = () => createSelector(
+  impactMapSelector(),
+  (impactMap) => impactMap.get('drawerOpened'),
+);
+
+
 export {
   impactMapSelector,
   boundsSelector,
   villagesSelector,
   boundsForZoomSelector,
   currentYearSelector,
+  drawerOpenedSelector,
 };

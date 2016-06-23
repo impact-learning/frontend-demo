@@ -65,10 +65,6 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
     updateVillages(villages);
   }
 
-  onClickCircle(e) {
-    console.log(e);
-  }
-
   prepareData() {
     const { villages } = this.props;
     if (!Object.keys(villages).length) {
@@ -104,8 +100,8 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
 
     const center = [35.3174, 104.8535];
     const projects = [
-      'Jinxiu',
-      'Huangsan',
+      '绿化扶平',
+      '金秀',
     ];
     const d = isEmpty(villages) ? [{
       coordinates: [110.18394058186335, 24.13800001458207],
@@ -135,7 +131,6 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                 bounds={bounds}
                 impactData={d}
                 boundsForZoom={boundsForZoom}
-                onClickCircle={console.log('OMG')}
               />
               <VictoryChart
                 width={width}
