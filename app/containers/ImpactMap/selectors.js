@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the impactMap state domain
  */
-const selectImpactMapDomain = state => state.get('impactMap');
+const impactMapSelector = () => (state) => state.get('impactMap');
 
 /**
  * Other specific selectors
@@ -15,13 +15,32 @@ const selectImpactMapDomain = state => state.get('impactMap');
  */
 
 const boundsSelector = () => createSelector(
-  [
-    selectImpactMapDomain,
-  ],
-  impactMap => impactMap.get('bounds').toJS(),
+  impactMapSelector(),
+  (impactMap) => impactMap.get('bounds').toJS(),
 );
 
-export default boundsSelector;
+const villagesSelector = () => createSelector(
+  impactMapSelector(),
+  (impactMap) => impactMap.get('villages').toJS(),
+);
+
+
+const boundsForZoomSelector = () => createSelector(
+  impactMapSelector(),
+  (impactMap) => impactMap.get('boundsForZoom').toJS(),
+);
+
+
+const currentYearSelector = () => createSelector(
+  impactMapSelector(),
+  (impactMap) => impactMap.get('currentYear').toJS(),
+);
+
+
 export {
-  selectImpactMapDomain,
+  impactMapSelector,
+  boundsSelector,
+  villagesSelector,
+  boundsForZoomSelector,
+  currentYearSelector,
 };
