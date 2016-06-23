@@ -11,18 +11,22 @@ class MapOverlay extends React.Component {
     map.getPanes().overlayPane.appendChild(this.root);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { boundsForZoom } = nextProps;
+    if (boundsForZoom.length) {
+      const { map } = this.props;
+      map.fitBounds(boundsForZoom);
+    }
+  }
+
   componentWillUnmount() {
     const { map } = this.props;
     map.getPanes().overlayPane.removeChild(this.root);
   }
 
   render() {
-    const { impactData, boundsForZoom } = this.props;
-    if (boundsForZoom.length) {
-      const { map } = this.props;
-      map.fitBounds(boundsForZoom);
-      console.log(this.props);
-    }
+    const { impactData } = this.props;
+
     return (
       <div
         ref={
