@@ -34,6 +34,7 @@ class D3Map extends React.Component {
       onViewreset,
       bounds,
       boundsForZoom,
+      height,
     } = this.props;
 
     // const countriesBorders = topojson.feature(CountryTopoData, CountryTopoData.objects.countries);
@@ -46,6 +47,9 @@ class D3Map extends React.Component {
           zoom={zoom}
           center={center}
           className={styles.map}
+          style={{
+            height,
+          }}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -67,6 +71,7 @@ class D3Map extends React.Component {
 
 D3Map.propTypes = {
   center: React.PropTypes.array,
+  height: React.PropTypes.number,
   boundsForZoom: React.PropTypes.array,
   maxZoom: React.PropTypes.number,
   zoom: React.PropTypes.number,

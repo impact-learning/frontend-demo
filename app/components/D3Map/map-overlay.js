@@ -42,7 +42,7 @@ class MapOverlay extends React.Component {
           <CircleMarker
             key={`${[d.coordinates[1], d.coordinates[0]]}`}
             center={[d.coordinates[1], d.coordinates[0]]}
-            radius={20}
+            radius={d.score}
             color="green"
             {...this.props}
           />
