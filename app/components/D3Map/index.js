@@ -5,22 +5,35 @@
 */
 
 import React from 'react';
-import { Map, TileLayer } from 'react-leaflet';
+import {
+  Map,
+  TileLayer,
+} from 'react-leaflet';
 import topojson from 'topojson';
 import styles from './styles.css';
 import MapOverlay from './map-overlay';
 import { toD3Path } from './utils';
 
+
 /* eslint-disable react/prefer-stateless-function */
 class D3Map extends React.Component {
+  // componentWillReceiveProps(nextProps) {
+  //   const { map }
+  //   if (nextProps.boundsForZoom !== this.props.boundsForZoom) {
+  //
+  //   }
+  // }
+
   render() {
     const {
       center,
       zoom,
       maxZoom,
       borderData,
+      impactData,
       onViewreset,
       bounds,
+      boundsForZoom,
     } = this.props;
 
     // const countriesBorders = topojson.feature(CountryTopoData, CountryTopoData.objects.countries);
@@ -43,6 +56,8 @@ class D3Map extends React.Component {
             provincesGeo={provincesGeo}
             onViewreset={onViewreset}
             bounds={bounds}
+            impactData={impactData}
+            boundsForZoom={boundsForZoom}
           />
         </Map>
       </div>
@@ -52,9 +67,11 @@ class D3Map extends React.Component {
 
 D3Map.propTypes = {
   center: React.PropTypes.array,
+  boundsForZoom: React.PropTypes.array,
   maxZoom: React.PropTypes.number,
   zoom: React.PropTypes.number,
   borderData: React.PropTypes.object,
+  impactData: React.PropTypes.array,
   projectCoordinates: React.PropTypes.object,
   bounds: React.PropTypes.array,
   onViewreset: React.PropTypes.func,
