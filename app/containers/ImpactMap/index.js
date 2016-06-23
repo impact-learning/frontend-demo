@@ -208,7 +208,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                   width: 80,
                   height: 80,
                 }}
-                onClick={() => browserHistory.push('dashboard')}
+                onClick={() => browserHistory.push('prediction')}
               >
                 <ArrowRight
                   color="#00BCD4"
