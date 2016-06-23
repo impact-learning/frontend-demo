@@ -13,7 +13,9 @@ class MapOverlay extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { boundsForZoom } = nextProps;
-    if (boundsForZoom.length) {
+    if (boundsForZoom.length &&
+      this.props.boundsForZoom !== nextProps.boundsForZoom
+    ) {
       const { map } = this.props;
       map.fitBounds(boundsForZoom);
     }
