@@ -9,6 +9,7 @@ import {
   FIT_TO_BOUNDS,
   ADD_VILLAGES,
   UPDATE_BOUNDS_FOR_ZOOM,
+  UPDATE_CURRENT_YEAR,
 } from './constants';
 
 export function updateMap(map) {
@@ -36,5 +37,12 @@ export function updateBoundsForZoom(bounds) {
   return {
     type: UPDATE_BOUNDS_FOR_ZOOM,
     bounds,
+  };
+}
+
+export function updateCurrentYear(year) {
+  return {
+    type: UPDATE_CURRENT_YEAR,
+    year,
   };
 }

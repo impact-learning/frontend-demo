@@ -31,9 +31,16 @@ const boundsForZoomSelector = () => createSelector(
 );
 
 
+const currentYearSelector = () => createSelector(
+  impactMapSelector(),
+  (impactMap) => impactMap.get('currentYear').toJS(),
+);
+
+
 export {
   impactMapSelector,
   boundsSelector,
   villagesSelector,
   boundsForZoomSelector,
+  currentYearSelector,
 };

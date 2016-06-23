@@ -10,6 +10,7 @@ import {
   FIT_TO_BOUNDS,
   ADD_VILLAGES,
   UPDATE_BOUNDS_FOR_ZOOM,
+  UPDATE_CURRENT_YEAR,
 } from './constants';
 
 const initialState = fromJS({
@@ -18,6 +19,7 @@ const initialState = fromJS({
   bounds: [],
   villages: {},
   boundsForZoom: [],
+  currentYear: 2015,
 });
 
 function impactMapReducer(state = initialState, action) {
@@ -43,6 +45,12 @@ function impactMapReducer(state = initialState, action) {
     case UPDATE_BOUNDS_FOR_ZOOM: {
       return state.merge({
         boundsForZoom: action.bounds,
+      });
+    }
+
+    case UPDATE_CURRENT_YEAR: {
+      return state.merge({
+        year: action.year,
       });
     }
 
