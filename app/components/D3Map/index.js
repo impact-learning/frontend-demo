@@ -35,6 +35,7 @@ class D3Map extends React.Component {
       bounds,
       boundsForZoom,
       height,
+      onClickCircle,
     } = this.props;
 
     // const countriesBorders = topojson.feature(CountryTopoData, CountryTopoData.objects.countries);
@@ -62,6 +63,7 @@ class D3Map extends React.Component {
             bounds={bounds}
             impactData={impactData}
             boundsForZoom={boundsForZoom}
+            onClickCircle={onClickCircle}
           />
         </Map>
       </div>
@@ -80,6 +82,7 @@ D3Map.propTypes = {
   projectCoordinates: React.PropTypes.object,
   bounds: React.PropTypes.array,
   onViewreset: React.PropTypes.func,
+  onClickCircle: React.PropTypes.func,
 };
 
 export { toD3Path };

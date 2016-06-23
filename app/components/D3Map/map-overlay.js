@@ -28,7 +28,7 @@ class MapOverlay extends React.Component {
   }
 
   render() {
-    const { impactData } = this.props;
+    const { impactData, onClickCircle } = this.props;
 
     return (
       <div
@@ -81,6 +81,7 @@ MapOverlay.propTypes = {
   provincesGeo: React.PropTypes.object,
   impactData: React.PropTypes.array,
   onViewreset: React.PropTypes.func,
+  onClickCircle: React.PropTypes.func,
 };
 
 export default MapOverlay;

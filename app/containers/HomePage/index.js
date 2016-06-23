@@ -16,8 +16,7 @@ import styles from './style.css';
 import RaisedButton from 'material-ui/RaisedButton';
 import ActionSearch from 'material-ui/svg-icons/action/search';
 import AutoComplete from 'material-ui/AutoComplete';
-import AppBar from 'material-ui/AppBar';
-
+import { GridList, GridTile } from 'material-ui/GridList';
 
 /* eslint-disable react/prefer-stateless-function */
 export default class HomePage extends React.Component {
@@ -29,40 +28,57 @@ export default class HomePage extends React.Component {
     ];
     return (
       <div>
-        <AppBar
-          title="Title"
-          iconClassNameRight="muidocs-icon-navigation-expand-more"
-        />
-        <ActionSearch className={styles.searchIcon} />
-        <AutoComplete
-          className={styles.searchBar}
-          hintText={'Search for Project'}
-          dataSource={projects}
-          filter={AutoComplete.fuzzyFilter}
-        />
-
-        <Paper
-          className={styles.ID}
+        <GridList
+          cols={3}
+          className={styles.home}
         >
-
-          <TextField
-            hintText="ID"
-          /><br />
-          <TextField
-            hintText="Password Field"
-            floatingLabelText="Password"
-            type="password"
-          /><br />
-          <br>
-          </br>
-          <RaisedButton
-            label="Login"
-            href={'/impactMap'}
-            linkButton
-            fullWidth
-            primary
-          />
-        </Paper>
+          <GridTile
+            cols={3}
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            <ActionSearch />
+            <div
+              style={{
+                width: 500,
+                display: 'inline-block',
+              }}
+            >
+              <AutoComplete
+                hintText={'Search for Project'}
+                dataSource={projects}
+                fullWidth
+                filter={AutoComplete.fuzzyFilter}
+              />
+            </div>
+          </GridTile>
+          <GridTile />
+          <GridTile>
+            <Paper
+              zDepth={3}
+            >
+              <TextField
+                hintText="ID"
+              /><br />
+              <TextField
+                hintText="Password Field"
+                floatingLabelText="Password"
+                type="password"
+              /><br />
+              <br>
+              </br>
+              <RaisedButton
+                label="Login"
+                href={'/impactMap'}
+                linkButton
+                fullWidth
+                primary
+              />
+            </Paper>
+          </GridTile>
+          <GridTile />
+        </GridList>
       </div>
     );
   }

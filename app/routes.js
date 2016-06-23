@@ -22,12 +22,16 @@ export default function createRoutes(store) {
       name: 'home',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
+          System.import('containers/HomePage/reducer'),
+          System.import('containers/HomePage/sagas'),
           System.import('containers/HomePage'),
         ]);
 
         const renderRoute = loadModule(cb);
 
-        importModules.then(([component]) => {
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('home', reducer.default);
+          injectSagas(sagas.default);
           renderRoute(component);
         });
 
@@ -73,10 +77,28 @@ export default function createRoutes(store) {
 
         importModules.catch(errorLoading);
       },
+    },    {
+      path: '/prediction',
+      name: 'prediction',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('containers/Prediction/reducer'),
+          System.import('containers/Prediction/sagas'),
+          System.import('containers/Prediction'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('prediction', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
     }, {
       path: '*',
-
-
       name: 'notfound',
       getComponent(nextState, cb) {
         System.import('containers/NotFoundPage')
