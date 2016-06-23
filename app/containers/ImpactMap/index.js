@@ -103,10 +103,12 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
       coordinates: [110.18394058186335, 24.13800001458207],
       year: currentYear,
       score: 20,
+      income: {},
     }] : Object.keys(villages).map(key => ({
       coordinates: villages[key].coordinates,
       year: currentYear,
       score: villages[key].scores.filter(s => s.year === currentYear)[0].overall,
+      income: villages[key].average_income_per_capita.filter(i => i.year === currentYear)[0].distribution,
     }));
 
 
@@ -117,7 +119,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
             <div className={styles.impactMap}>
               <D3Map
                 width={width}
-                height={this.height * 0.7}
+                height={this.height * 0.6}
                 center={center}
                 maxZoom={19}
                 zoom={4}
@@ -215,7 +217,6 @@ function mapDispatchToProps(dispatch) {
       ]));
     },
     onClickOnChart: (item) => {
-      console.log(item);
       const i = parseInt(item.key.split('-')[1], 10);
       dispatch(updateCurrentYear(2009 + i));
     },
