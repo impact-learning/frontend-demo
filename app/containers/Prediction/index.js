@@ -23,7 +23,7 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
       basePoints.forEach((b, idx) => {
         fp1.push({
           x: b.x,
-          y: b.y + b.y * variances[idx] * i / intensity,
+          y: b.y + b.y * (variances[idx] * i / intensity),
         });
       });
       fuzzyPoints.push(fp1);
