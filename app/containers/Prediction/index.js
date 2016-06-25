@@ -12,6 +12,7 @@ import ContainerDimensions from 'react-container-dimensions';
 import {
   VictoryChart,
   VictoryLine,
+  VictoryAxis,
 } from 'victory';
 
 export class Prediction extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -29,9 +30,6 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
       fuzzyPoints.push(fp1);
     }
     return fuzzyPoints;
-  }
-  renderLines() {
-
   }
 
   render() {
@@ -74,6 +72,20 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
                     />
                   )
                 }
+                <VictoryAxis
+                  orientation="bottom"
+                  standalone={false}
+                />
+                <VictoryAxis
+                  dependentAxis
+                  standalone={false}
+                  orientation="left"
+                />
+                <VictoryAxis
+                  dependentAxis
+                  standalone={false}
+                  orientation="right"
+                />
               </VictoryChart>
           }
         </ContainerDimensions>
