@@ -30,3 +30,9 @@
   position: absolute;
   top: 50%;
 }
+
+.chart {
+  width: 100%;
+  heigh: 100px;
+  overflow: hidden;
+}

@@ -21,7 +21,11 @@ import socket from 'utils/socketio';
 import isEmpty from 'lodash/isEmpty';
 import L from 'leaflet';
 import { grey500, cyan500 } from 'material-ui/styles/colors';
-import { VictoryChart, VictoryLine, VictoryScatter } from 'victory';
+import {
+  VictoryChart,
+  VictoryLine,
+  VictoryAxis,
+} from 'victory';
 import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
@@ -42,7 +46,7 @@ import {
   currentYearSelector,
 } from './selectors';
 
-const brushHeight = 150;
+const brushHeight = 100;
 
 export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
@@ -113,11 +117,11 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
       <div className={styles.impactMap}>
         <ContainerDimensions>
           {
-            ({ width, height }) =>
+            ({ width }) =>
               <div>
                 <D3Map
                   width={width}
-                  height={(height || getScreenSize().height - appBarHeight)}
+                  height={(getScreenSize().height - (appBarHeight + brushHeight))}
                   center={center}
                   maxZoom={19}
                   zoom={4}
@@ -185,6 +189,30 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                 </IconButton>
               </div>
         }
+        </ContainerDimensions>
+        <ContainerDimensions>
+          {({ width }) =>
+            <Paper
+              className={styles.chart}
+            >
+              <VictoryChart
+                width={width}
+                height={100}
+                padding={{
+                  top: 20,
+                  bottom: 25,
+                  left: 10,
+                  right: 10,
+                }}
+                style={{
+                  height: '100%',
+                }}
+              >
+                <VictoryLine />
+                <VictoryAxis />
+              </VictoryChart>
+            </Paper>
+          }
         </ContainerDimensions>
       </div>
     );
