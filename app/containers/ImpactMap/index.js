@@ -20,7 +20,7 @@ import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
 import isEmpty from 'lodash/isEmpty';
 import L from 'leaflet';
-// import { LineChart, XAxis, Line, Tooltip } from 'recharts';
+import { grey500, cyan500 } from 'material-ui/styles/colors';
 import { VictoryChart, VictoryLine, VictoryScatter } from 'victory';
 import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
@@ -131,12 +131,17 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                 <Paper
                   className={styles.searchBoxContainer}
                 >
-                  <ActionSearch />
                   <AutoComplete
                     hintText={'Search for Project'}
                     dataSource={projects}
                     filter={AutoComplete.fuzzyFilter}
                     onNewRequest={onSearch}
+                  />
+                  <ActionSearch
+                    color={grey500}
+                    style={{
+                      marginLeft: 12,
+                    }}
                   />
                 </Paper>
                 <IconButton
@@ -155,7 +160,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                   onClick={() => browserHistory.push('dashboard')}
                 >
                   <ArrowLeft
-                    color="#00BCD4"
+                    color={cyan500}
                   />
                 </IconButton>
                 <IconButton
@@ -175,7 +180,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                   onClick={() => browserHistory.push('prediction')}
                 >
                   <ArrowRight
-                    color="#00BCD4"
+                    color={cyan500}
                   />
                 </IconButton>
               </div>
