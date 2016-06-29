@@ -26,6 +26,7 @@ import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import { browserHistory } from 'react-router';
+import { getScreenSize, appBarHeight } from 'utils/utils';
 
 import {
   updateMap,
@@ -41,6 +42,8 @@ import {
   currentYearSelector,
 } from './selectors';
 
+const brushHeight = 150;
+
 export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
     super();
@@ -49,15 +52,6 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
   }
   componentDidMount() {
     socket.on('search response', this.onSearchResponse);
-    this.height = window.innerWidth
-      || document.documentElement.clientWidth
-      || document.body.clientWidth;
-  }
-
-  componentWillReceiveProps() {
-    this.height = window.innerWidth
-      || document.documentElement.clientWidth
-      || document.body.clientWidth;
   }
 
   onSearchResponse(villages) {
@@ -95,7 +89,6 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
       villages,
       boundsForZoom,
       currentYear,
-      onClickOnChart,
     } = this.props;
 
     const center = [35.3174, 104.8535];
@@ -117,103 +110,78 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
 
 
     return (
-      <ContainerDimensions>
-        {
-          ({ width }) =>
-            <div className={styles.impactMap}>
-              <D3Map
-                width={width}
-                height={this.height * 0.55}
-                center={center}
-                maxZoom={19}
-                zoom={4}
-                borderData={provinceBordersCHN}
-                projectCoordinates={jinxiu}
-                onViewreset={this.props.onViewreset}
-                bounds={bounds}
-                impactData={d}
-                boundsForZoom={boundsForZoom}
-              />
-              <VictoryChart
-                width={width}
-                height={this.height * 0.15}
-                events={
-                  [{
-                    taget: 'label',
-                    childName: 'PPIScatter',
-                    eventHandlers: {
-                      onClick: (e, i) => {
-                        onClickOnChart(i);
-                      },
-                    },
-                  }]
-                }
-              >
-                <VictoryLine
-                  name="PPILine"
-                  standalone={false}
-                  interpolation="monotoneX"
-                  data={this.prepareData()}
+      <div className={styles.impactMap}>
+        <ContainerDimensions>
+          {
+            ({ width, height }) =>
+              <div>
+                <D3Map
+                  width={width}
+                  height={(height || getScreenSize().height - appBarHeight)}
+                  center={center}
+                  maxZoom={19}
+                  zoom={4}
+                  borderData={provinceBordersCHN}
+                  projectCoordinates={jinxiu}
+                  onViewreset={this.props.onViewreset}
+                  bounds={bounds}
+                  impactData={d}
+                  boundsForZoom={boundsForZoom}
                 />
-                <VictoryScatter
-                  name="PPIScatter"
-                  standalone={false}
-                  data={this.prepareData()}
-                />
-              </VictoryChart>
-              <Paper
-                className={styles.searchBoxContainer}
-              >
-                <ActionSearch />
-                <AutoComplete
-                  hintText={'Search for Project'}
-                  dataSource={projects}
-                  filter={AutoComplete.fuzzyFilter}
-                  onNewRequest={onSearch}
-                />
-              </Paper>
-              <IconButton
-                style={{
-                  display: 'block',
-                  position: 'absolute',
-                  top: '40%',
-                  width: 80,
-                  height: 80,
-                  padding: 0,
-                }}
-                iconStyle={{
-                  width: 80,
-                  height: 80,
-                }}
-                onClick={() => browserHistory.push('dashboard')}
-              >
-                <ArrowLeft
-                  color="#00BCD4"
-                />
-              </IconButton>
-              <IconButton
-                style={{
-                  display: 'block',
-                  position: 'absolute',
-                  top: '40%',
-                  right: 0,
-                  width: 80,
-                  height: 80,
-                  padding: 0,
-                }}
-                iconStyle={{
-                  width: 80,
-                  height: 80,
-                }}
-                onClick={() => browserHistory.push('prediction')}
-              >
-                <ArrowRight
-                  color="#00BCD4"
-                />
-              </IconButton>
-            </div>
+                <Paper
+                  className={styles.searchBoxContainer}
+                >
+                  <ActionSearch />
+                  <AutoComplete
+                    hintText={'Search for Project'}
+                    dataSource={projects}
+                    filter={AutoComplete.fuzzyFilter}
+                    onNewRequest={onSearch}
+                  />
+                </Paper>
+                <IconButton
+                  style={{
+                    display: 'block',
+                    position: 'absolute',
+                    top: '40%',
+                    width: 80,
+                    height: 80,
+                    padding: 0,
+                  }}
+                  iconStyle={{
+                    width: 80,
+                    height: 80,
+                  }}
+                  onClick={() => browserHistory.push('dashboard')}
+                >
+                  <ArrowLeft
+                    color="#00BCD4"
+                  />
+                </IconButton>
+                <IconButton
+                  style={{
+                    display: 'block',
+                    position: 'absolute',
+                    top: '40%',
+                    right: 0,
+                    width: 80,
+                    height: 80,
+                    padding: 0,
+                  }}
+                  iconStyle={{
+                    width: 80,
+                    height: 80,
+                  }}
+                  onClick={() => browserHistory.push('prediction')}
+                >
+                  <ArrowRight
+                    color="#00BCD4"
+                  />
+                </IconButton>
+              </div>
         }
-      </ContainerDimensions>
+        </ContainerDimensions>
+      </div>
     );
   }
 }
