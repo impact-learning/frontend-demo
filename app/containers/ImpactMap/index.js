@@ -209,7 +209,19 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                 }}
               >
                 <VictoryLine />
-                <VictoryAxis />
+                <VictoryAxis
+                  style={{
+                    axis: {
+                      strokeWidth: 1,
+                    },
+                    ticks: {
+                      strokeWidth: 1,
+                    },
+                    tickLabels: {
+                      fontSize: 11,
+                    },
+                  }}
+                />
               </VictoryChart>
             </Paper>
           }
