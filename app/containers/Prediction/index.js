@@ -17,7 +17,7 @@ import {
 
 export class Prediction extends React.Component { // eslint-disable-line react/prefer-stateless-function
   genFuzzy(basePoints, variances) {
-    const intensity = 80;
+    const intensity = 30;
     const fuzzyPoints = [];
     for (let i = 1; i <= intensity; i++) {
       const fp1 = [];
