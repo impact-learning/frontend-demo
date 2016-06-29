@@ -1,5 +1,10 @@
 .impactMap {
   position: relative;
+  height: 100%;
+}
+
+.mapContainer {
+  height: 80%
 }
 
 .searchBoxContainer {
