@@ -196,6 +196,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
               className={styles.chart}
             >
               <VictoryChart
+                ref="chart"
                 width={width}
                 height={100}
                 padding={{
@@ -208,7 +209,14 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                   height: '100%',
                 }}
               >
-                <VictoryLine />
+                <VictoryLine
+                  style={{
+                    data: {
+                      stroke: cyan500,
+                      strokeWidth: 1,
+                    },
+                  }}
+                />
                 <VictoryAxis
                   style={{
                     axis: {
