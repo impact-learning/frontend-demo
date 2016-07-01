@@ -21,16 +21,13 @@ import socket from 'utils/socketio';
 import isEmpty from 'lodash/isEmpty';
 import L from 'leaflet';
 import { grey500, cyan500 } from 'material-ui/styles/colors';
-import {
-  VictoryChart,
-  VictoryLine,
-  VictoryAxis,
-} from 'victory';
+
 import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import { browserHistory } from 'react-router';
 import { getScreenSize, appBarHeight } from 'utils/utils';
+import DataSelector from 'components/DataSelector';
 
 import {
   updateMap,
@@ -48,12 +45,14 @@ import {
 
 const brushHeight = 100;
 
-export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
     super();
     this.onSearchResponse = this.onSearchResponse.bind(this);
     this.prepareData = this.prepareData.bind(this);
+    this.onBrush = this.onBrush.bind(this);
   }
+
   componentDidMount() {
     socket.on('search response', this.onSearchResponse);
   }
@@ -61,6 +60,10 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
   onSearchResponse(villages) {
     const { updateVillages } = this.props;
     updateVillages(villages);
+  }
+
+  onBrush(e) {
+    console.log(e);
   }
 
   prepareData() {
@@ -191,47 +194,19 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
         }
         </ContainerDimensions>
         <ContainerDimensions>
-          {({ width }) =>
-            <Paper
-              className={styles.chart}
-            >
-              <VictoryChart
-                ref="chart"
+          {
+            ({ width }) =>
+              <DataSelector
                 width={width}
                 height={100}
                 padding={{
-                  top: 20,
-                  bottom: 25,
-                  left: 10,
-                  right: 10,
+                  top: 0,
+                  left: 20,
+                  right: 20,
+                  bottom: 20,
                 }}
-                style={{
-                  height: '100%',
-                }}
-              >
-                <VictoryLine
-                  style={{
-                    data: {
-                      stroke: cyan500,
-                      strokeWidth: 1,
-                    },
-                  }}
-                />
-                <VictoryAxis
-                  style={{
-                    axis: {
-                      strokeWidth: 1,
-                    },
-                    ticks: {
-                      strokeWidth: 1,
-                    },
-                    tickLabels: {
-                      fontSize: 11,
-                    },
-                  }}
-                />
-              </VictoryChart>
-            </Paper>
+                dateRange={[new Date(2013, 7, 2), new Date(2014, 7, 5)]}
+              />
           }
         </ContainerDimensions>
       </div>
