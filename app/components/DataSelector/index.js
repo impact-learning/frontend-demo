@@ -7,12 +7,22 @@
 import React from 'react';
 import {
   scaleTime,
-  brushX,
-  select,
-  timeMonth,
+} from 'd3-scale';
+import {
   axisBottom,
+} from 'd3-axis';
+import {
+  timeMonth,
+} from 'd3-time';
+
+import {
+  brushX,
+} from 'd3-brush';
+import {
   event as d3Event,
-} from 'd3';
+  select,
+} from 'd3-selection';
+
 import styles from './styles.css';
 
 
@@ -71,7 +81,7 @@ class DataSelector extends React.Component { // eslint-disable-line react/prefer
       domain1[0] = timeMonth.floor(domain0[0]);
       domain1[1] = timeMonth.ceil(domain0[1]);
     }
-
+    console.log(`Move:${domain1}`);
     select(this.gBrush)
       .transition()
       .call(this.brush.move, domain1.map(this.x));

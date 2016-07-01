@@ -2,7 +2,7 @@ import React from 'react';
 // import MapCountryBordersLayer from './map-country-borders-layer';
 import { CircleMarker, Popup } from 'react-leaflet';
 import { PieChart, Pie, Tooltip } from 'recharts';
-import d3 from 'd3';
+import { precisionRound } from 'd3-format';
 
 /* eslint-disable react/prefer-stateless-function */
 class MapOverlay extends React.Component {
@@ -56,7 +56,7 @@ class MapOverlay extends React.Component {
                     data={
                       Object.keys(d.income).map(k => ({
                         name: k,
-                        value: d3.round(d.income[k] * 100, 2),
+                        value: precisionRound(d.income[k] * 100, 2),
                       }))
                     }
                     outerRadius={60}
