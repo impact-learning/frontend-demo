@@ -19,6 +19,7 @@ import Paper from 'material-ui/Paper';
 import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
 import isEmpty from 'lodash/isEmpty';
+import inRange from 'lodash/inRange';
 import L from 'leaflet';
 import { grey500, cyan500 } from 'material-ui/styles/colors';
 
@@ -34,13 +35,13 @@ import {
   fitToBounds,
   addVillages,
   updateBoundsForZoom,
-  updateCurrentYear,
+  updateCurrentX,
 } from './actions';
 import {
   boundsSelector,
   villagesSelector,
   boundsForZoomSelector,
-  currentYearSelector,
+  currentXSelector,
 } from './selectors';
 
 const brushHeight = 100;
@@ -50,7 +51,6 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
     super();
     this.onSearchResponse = this.onSearchResponse.bind(this);
     this.prepareData = this.prepareData.bind(this);
-    this.onBrush = this.onBrush.bind(this);
   }
 
   componentDidMount() {
@@ -60,10 +60,6 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
   onSearchResponse(villages) {
     const { updateVillages } = this.props;
     updateVillages(villages);
-  }
-
-  onBrush(e) {
-    console.log(e);
   }
 
   prepareData() {
@@ -95,7 +91,8 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
       onSearch,
       villages,
       boundsForZoom,
-      currentYear,
+      currentX,
+      onFilterX,
     } = this.props;
 
     const center = [35.3174, 104.8535];
@@ -105,14 +102,22 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
     ];
     const d = isEmpty(villages) ? [{
       coordinates: [110.18394058186335, 24.13800001458207],
-      year: currentYear,
+      date: new Date(),
       score: 20,
       income: {},
     }] : Object.keys(villages).map(key => ({
       coordinates: villages[key].coordinates,
-      year: currentYear,
-      score: villages[key].scores.filter(s => s.year === currentYear)[0].overall,
-      income: villages[key].average_income_per_capita.filter(i => i.year === currentYear)[0].distribution,
+      date: new Date(`${villages[key].year}`),
+      score: villages[key].scores.filter(s => {
+        if (isEmpty(currentX)) return true;
+        // return inRange(new Date(`${s.year}`, currentX[0], currentX[1]));
+        return s.year === currentX[1].getFullYear();
+      })[0].overall,
+      income: villages[key].average_income_per_capita.filter(i => {
+        if (isEmpty(currentX)) return true;
+        // return inRange(new Date(`${i.year}`, currentX[0], currentX[1]));
+        return i.year === currentX[1].getFullYear();
+      })[0].distribution,
     }));
 
 
@@ -205,7 +210,8 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
                   right: 20,
                   bottom: 20,
                 }}
-                dateRange={[new Date(2013, 7, 2), new Date(2014, 7, 5)]}
+                dateRange={[new Date(2010, 7, 2), new Date(2016, 7, 5)]}
+                filterX={x => onFilterX(x)}
               />
           }
         </ContainerDimensions>
@@ -221,15 +227,15 @@ ImpactMap.propTypes = {
   boundsForZoom: React.PropTypes.array,
   onSearch: React.PropTypes.func,
   updateVillages: React.PropTypes.func,
-  onClickOnChart: React.PropTypes.func,
-  currentYear: React.PropTypes.number,
+  onFilterX: React.PropTypes.func,
+  currentX: React.PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   bounds: boundsSelector(),
   villages: villagesSelector(),
   boundsForZoom: boundsForZoomSelector(),
-  currentYear: currentYearSelector(),
+  currentX: currentXSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -255,9 +261,8 @@ function mapDispatchToProps(dispatch) {
         [bounds._northEast.lat, bounds._northEast.lng], // eslint-disable-line no-underscore-dangle
       ]));
     },
-    onClickOnChart: (item) => {
-      const i = parseInt(item.key.split('-')[1], 10);
-      dispatch(updateCurrentYear(2009 + i));
+    onFilterX: (x) => {
+      dispatch(updateCurrentX(x));
     },
   };
 }

@@ -81,10 +81,10 @@ class DataSelector extends React.Component { // eslint-disable-line react/prefer
       domain1[0] = timeMonth.floor(domain0[0]);
       domain1[1] = timeMonth.ceil(domain0[1]);
     }
-    console.log(`Move:${domain1}`);
     select(this.gBrush)
       .transition()
       .call(this.brush.move, domain1.map(this.x));
+    this.props.filterX(domain1);
   }
 
   render() {
@@ -144,6 +144,7 @@ DataSelector.propTypes = {
   width: React.PropTypes.number,
   height: React.PropTypes.number,
   dateRange: React.PropTypes.array,
+  filterX: React.PropTypes.func,
 };
 
 export default DataSelector;

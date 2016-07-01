@@ -9,7 +9,7 @@ import {
   FIT_TO_BOUNDS,
   ADD_VILLAGES,
   UPDATE_BOUNDS_FOR_ZOOM,
-  UPDATE_CURRENT_YEAR,
+  UPDATE_CURRENT_X,
   TOGGLE_DRAWER,
 } from './constants';
 
@@ -41,10 +41,10 @@ export function updateBoundsForZoom(bounds) {
   };
 }
 
-export function updateCurrentYear(year) {
+export function updateCurrentX(x) {
   return {
-    type: UPDATE_CURRENT_YEAR,
-    year,
+    type: UPDATE_CURRENT_X,
+    x,
   };
 }
 
