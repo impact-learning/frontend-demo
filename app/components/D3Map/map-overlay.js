@@ -2,7 +2,6 @@ import React from 'react';
 // import MapCountryBordersLayer from './map-country-borders-layer';
 import { CircleMarker, Popup } from 'react-leaflet';
 import { PieChart, Pie, Tooltip } from 'recharts';
-import { precisionRound } from 'd3-format';
 import { greenA700, greenA400, greenA200, amber900, amber400, amber700, cyan500 } from 'material-ui/styles/colors';
 import { median, deviation } from 'd3-array';
 import inRange from 'lodash/inRange';
@@ -56,7 +55,7 @@ class MapOverlay extends React.Component {
           <CircleMarker
             key={`${[d.coordinates[1], d.coordinates[0]]}`}
             center={[d.coordinates[1], d.coordinates[0]]}
-            radius={d.score / 2}
+            radius={Math.pow((d.score - med), 2) * Math.PI}
             color={colors[i]}
             stroke={false}
             fillOpacity={0.7}
@@ -72,7 +71,7 @@ class MapOverlay extends React.Component {
                     data={
                       Object.keys(d.income).map(k => ({
                         name: k,
-                        value: precisionRound(d.income[k] * 100, 2),
+                        value: Math.round(d.income[k] * 10000) / 100,
                       }))
                     }
                     outerRadius={60}
