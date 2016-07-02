@@ -55,7 +55,7 @@ class DataSelector extends React.Component { // eslint-disable-line react/prefer
       .tickFormat(() => null);
 
     this.axisX = axisBottom(this.x)
-      .ticks(timeMonth)
+      .ticks(timeMonth.every(6))
       .tickPadding(0);
   }
 
