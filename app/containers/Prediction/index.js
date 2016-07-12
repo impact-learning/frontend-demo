@@ -6,16 +6,44 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import selectPrediction from './selectors';
 import styles from './styles.css';
 import ContainerDimensions from 'react-container-dimensions';
+import socket from 'utils/socketio';
+import { createStructuredSelector } from 'reselect';
+
 import {
   VictoryChart,
   VictoryLine,
   VictoryAxis,
 } from 'victory';
 
+import {
+  updateScores,
+} from './actions';
+
+
+import {
+  scoresSelector,
+} from './selectors';
+
 export class Prediction extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor() {
+    super();
+    this.onResponseHistData = this.onResponseHistData.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.onGetHistData();
+    socket.on('response historical data', this.onResponseHistData);
+  }
+
+  onResponseHistData(data) {
+    const {
+      updatePrediction,
+    } = this.props;
+    updatePrediction(data);
+  }
+
   genFuzzy(basePoints, variances) {
     const intensity = 30;
     const fuzzyPoints = [];
@@ -33,21 +61,12 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
   }
 
   render() {
-    const base = [
-      { x: '2010', y: 2800 },
-      { x: '2011', y: 3000 },
-      { x: '2012', y: 2000 },
-      { x: '2013', y: 2780 },
-      { x: '2014', y: 1890 },
-      { x: '2015', y: 2390 },
-      { x: '2016', y: 3490 },
-      { x: '2017', y: 4490 },
-      { x: '2018', y: 6490 },
-      { x: '2019', y: 8490 },
-      { x: '2020', y: 9490 },
-    ];
+    const {
+      scores,
+    } = this.props;
+
     const variances = [0, 0, 0, 0, 0, 0, 0, 0.1, 0.17, 0.2, 0.3];
-    const data = this.genFuzzy(base, variances);
+    const data = this.genFuzzy(scores, variances);
     return (
       <div className={styles.prediction}>
         <ContainerDimensions>
@@ -94,11 +113,26 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
   }
 }
 
-const mapStateToProps = selectPrediction();
+
+Prediction.propTypes = {
+  onGetHistData: React.PropTypes.func,
+  updatePrediction: React.PropTypes.func,
+  scores: React.PropTypes.object,
+};
+
+const mapStateToProps = createStructuredSelector({
+  scores: scoresSelector(),
+});
 
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
+    onGetHistData: () => {
+      socket.emit('get historical data');
+    },
+    updatePrediction: (scores) => {
+      updateScores(scores);
+    },
   };
 }
 
