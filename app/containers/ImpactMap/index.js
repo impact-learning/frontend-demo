@@ -19,7 +19,7 @@ import Paper from 'material-ui/Paper';
 import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
 import isEmpty from 'lodash/isEmpty';
-import inRange from 'lodash/inRange';
+// import inRange from 'lodash/inRange';
 import L from 'leaflet';
 import { grey500, cyan500 } from 'material-ui/styles/colors';
 
@@ -100,6 +100,7 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
     const projects = [
       '绿化扶平',
       '金秀',
+      'CGF',
     ];
     const d = isEmpty(villages) ? [{
       coordinates: [110.18394058186335, 24.13800001458207],
@@ -211,7 +212,7 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
                   right: 20,
                   bottom: 20,
                 }}
-                dateRange={[new Date(2010, 7, 2), new Date(2016, 7, 5)]}
+                dateRange={[new Date(2010, 1, 1), new Date(2016, 7, 5)]}
                 filterX={x => onFilterX(x)}
               />
           }
