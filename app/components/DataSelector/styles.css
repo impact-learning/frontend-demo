@@ -1,0 +1,25 @@
+.dataSelector {
+
+}
+
+.gridBackground {
+  fill: #ddd;
+  stroke: none;
+}
+
+.brush {
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+.grid line,
+.grid path {
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
+}
+
+.grid .tick--minor line {
+  stroke-opacity: .5;
+}
