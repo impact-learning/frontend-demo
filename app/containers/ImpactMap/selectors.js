@@ -31,9 +31,9 @@ const boundsForZoomSelector = () => createSelector(
 );
 
 
-const currentYearSelector = () => createSelector(
+const currentXSelector = () => createSelector(
   impactMapSelector(),
-  (impactMap) => impactMap.get('currentYear'),
+  (impactMap) => impactMap.get('currentX').toJS(),
 );
 
 
@@ -48,6 +48,6 @@ export {
   boundsSelector,
   villagesSelector,
   boundsForZoomSelector,
-  currentYearSelector,
+  currentXSelector,
   drawerOpenedSelector,
 };

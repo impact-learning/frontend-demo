@@ -19,37 +19,41 @@ import Paper from 'material-ui/Paper';
 import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
 import isEmpty from 'lodash/isEmpty';
+// import inRange from 'lodash/inRange';
 import L from 'leaflet';
-// import { LineChart, XAxis, Line, Tooltip } from 'recharts';
-import { VictoryChart, VictoryLine, VictoryScatter } from 'victory';
+import { grey500, cyan500 } from 'material-ui/styles/colors';
+
 import IconButton from 'material-ui/IconButton';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import { browserHistory } from 'react-router';
 import { getScreenSize, appBarHeight } from 'utils/utils';
+import DataSelector from 'components/DataSelector';
+
 
 import {
   updateMap,
   fitToBounds,
   addVillages,
   updateBoundsForZoom,
-  updateCurrentYear,
+  updateCurrentX,
 } from './actions';
 import {
   boundsSelector,
   villagesSelector,
   boundsForZoomSelector,
-  currentYearSelector,
+  currentXSelector,
 } from './selectors';
 
-const brushHeight = 150;
+const brushHeight = 100;
 
-export class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
     super();
     this.onSearchResponse = this.onSearchResponse.bind(this);
     this.prepareData = this.prepareData.bind(this);
   }
+
   componentDidMount() {
     socket.on('search response', this.onSearchResponse);
   }
@@ -88,24 +92,34 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
       onSearch,
       villages,
       boundsForZoom,
-      currentYear,
+      currentX,
+      onFilterX,
     } = this.props;
 
     const center = [35.3174, 104.8535];
     const projects = [
       '绿化扶平',
       '金秀',
+      'CGF',
     ];
     const d = isEmpty(villages) ? [{
       coordinates: [110.18394058186335, 24.13800001458207],
-      year: currentYear,
+      date: new Date(),
       score: 20,
       income: {},
     }] : Object.keys(villages).map(key => ({
       coordinates: villages[key].coordinates,
-      year: currentYear,
-      score: villages[key].scores.filter(s => s.year === currentYear)[0].overall,
-      income: villages[key].average_income_per_capita.filter(i => i.year === currentYear)[0].distribution,
+      date: new Date(`${villages[key].year}`),
+      score: villages[key].scores.filter(s => {
+        if (isEmpty(currentX)) return true;
+        // return inRange(new Date(`${s.year}`, currentX[0], currentX[1]));
+        return s.year === currentX[1].getFullYear();
+      })[0].overall,
+      income: villages[key].average_income_per_capita.filter(i => {
+        if (isEmpty(currentX)) return true;
+        // return inRange(new Date(`${i.year}`, currentX[0], currentX[1]));
+        return i.year === currentX[1].getFullYear();
+      })[0].distribution,
     }));
 
 
@@ -113,11 +127,11 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
       <div className={styles.impactMap}>
         <ContainerDimensions>
           {
-            ({ width, height }) =>
+            ({ width }) =>
               <div>
                 <D3Map
                   width={width}
-                  height={(height || getScreenSize().height - appBarHeight)}
+                  height={(getScreenSize().height - (appBarHeight + brushHeight))}
                   center={center}
                   maxZoom={19}
                   zoom={4}
@@ -131,12 +145,17 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                 <Paper
                   className={styles.searchBoxContainer}
                 >
-                  <ActionSearch />
                   <AutoComplete
                     hintText={'Search for Project'}
                     dataSource={projects}
                     filter={AutoComplete.fuzzyFilter}
                     onNewRequest={onSearch}
+                  />
+                  <ActionSearch
+                    color={grey500}
+                    style={{
+                      marginLeft: 12,
+                    }}
                   />
                 </Paper>
                 <IconButton
@@ -155,7 +174,7 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                   onClick={() => browserHistory.push('dashboard')}
                 >
                   <ArrowLeft
-                    color="#00BCD4"
+                    color={cyan500}
                   />
                 </IconButton>
                 <IconButton
@@ -175,11 +194,28 @@ export class ImpactMap extends React.Component { // eslint-disable-line react/pr
                   onClick={() => browserHistory.push('prediction')}
                 >
                   <ArrowRight
-                    color="#00BCD4"
+                    color={cyan500}
                   />
                 </IconButton>
               </div>
         }
+        </ContainerDimensions>
+        <ContainerDimensions>
+          {
+            ({ width }) =>
+              <DataSelector
+                width={width}
+                height={100}
+                padding={{
+                  top: 0,
+                  left: 20,
+                  right: 20,
+                  bottom: 20,
+                }}
+                dateRange={[new Date(2010, 1, 1), new Date(2016, 7, 5)]}
+                filterX={x => onFilterX(x)}
+              />
+          }
         </ContainerDimensions>
       </div>
     );
@@ -193,15 +229,15 @@ ImpactMap.propTypes = {
   boundsForZoom: React.PropTypes.array,
   onSearch: React.PropTypes.func,
   updateVillages: React.PropTypes.func,
-  onClickOnChart: React.PropTypes.func,
-  currentYear: React.PropTypes.number,
+  onFilterX: React.PropTypes.func,
+  currentX: React.PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   bounds: boundsSelector(),
   villages: villagesSelector(),
   boundsForZoom: boundsForZoomSelector(),
-  currentYear: currentYearSelector(),
+  currentX: currentXSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -227,9 +263,8 @@ function mapDispatchToProps(dispatch) {
         [bounds._northEast.lat, bounds._northEast.lng], // eslint-disable-line no-underscore-dangle
       ]));
     },
-    onClickOnChart: (item) => {
-      const i = parseInt(item.key.split('-')[1], 10);
-      dispatch(updateCurrentYear(2009 + i));
+    onFilterX: (x) => {
+      dispatch(updateCurrentX(x));
     },
   };
 }

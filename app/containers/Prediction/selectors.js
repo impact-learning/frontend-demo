@@ -19,7 +19,14 @@ const selectPrediction = () => createSelector(
   (substate) => substate.toJS()
 );
 
+
+const scoresSelector = () => createSelector(
+  selectPredictionDomain(),
+  (prediction) => prediction.get('scores').toJS(),
+);
+
 export default selectPrediction;
 export {
   selectPredictionDomain,
+  scoresSelector,
 };

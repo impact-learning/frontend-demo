@@ -2,7 +2,9 @@ import React from 'react';
 // import MapCountryBordersLayer from './map-country-borders-layer';
 import { CircleMarker, Popup } from 'react-leaflet';
 import { PieChart, Pie, Tooltip } from 'recharts';
-import d3 from 'd3';
+import { greenA700, greenA400, greenA200, amber900, amber400, amber700, cyan500 } from 'material-ui/styles/colors';
+import { median, deviation } from 'd3-array';
+import inRange from 'lodash/inRange';
 
 /* eslint-disable react/prefer-stateless-function */
 class MapOverlay extends React.Component {
@@ -28,7 +30,18 @@ class MapOverlay extends React.Component {
   }
 
   render() {
-    const { impactData, onClickCircle } = this.props;
+    const { impactData } = this.props;
+    const scores = impactData.map(d => d.score);
+    const med = median(scores);
+    const sd = deviation(scores);
+    const colors = scores.map(s => {
+      if (s > med + 2 * sd) return greenA700;
+      if (inRange(s, med + sd, med + 2 * sd)) return greenA400;
+      if (inRange(s, med, med + sd)) return greenA200;
+      if (inRange(s, med - sd, med)) return amber400;
+      if (inRange(s, med - 2 * sd, med - sd)) return amber700;
+      return amber900;
+    });
 
     return (
       <div
@@ -38,12 +51,14 @@ class MapOverlay extends React.Component {
           }
         }
       >
-        {impactData.map(d =>
+        {impactData.map((d, i) =>
           <CircleMarker
             key={`${[d.coordinates[1], d.coordinates[0]]}`}
             center={[d.coordinates[1], d.coordinates[0]]}
-            radius={d.score}
-            color="green"
+            radius={Math.pow((d.score - med), 2) * Math.PI}
+            color={colors[i]}
+            stroke={false}
+            fillOpacity={0.7}
             {...this.props}
           >
             <Popup>
@@ -56,11 +71,13 @@ class MapOverlay extends React.Component {
                     data={
                       Object.keys(d.income).map(k => ({
                         name: k,
-                        value: d3.round(d.income[k] * 100, 2),
+                        value: Math.round(d.income[k] * 10000) / 100,
                       }))
                     }
                     outerRadius={60}
-                    fill="#8884d8"
+                    fill={cyan500}
+                    isAnimationActive={false}
+                    labelLine={false}
                     label
                   />
                   <Tooltip />
