@@ -10,7 +10,7 @@ import styles from './styles.css';
 import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
 import { createStructuredSelector } from 'reselect';
-
+import { greenA700, greenA400, greenA200, amber900, amber400, amber700, cyan500 } from 'material-ui/styles/colors';
 import Slider from 'material-ui/Slider';
 import {
   List,
@@ -28,6 +28,7 @@ import {
 
 import {
   VictoryLine,
+  VictoryScatter,
   VictoryAxis,
 } from 'victory';
 
@@ -109,12 +110,54 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
                         data: {
                           stroke: '#00BCD4',
                           strokeOpacity: 0.4,
-                          opacity: 0.3,
+                          opacity: 0.5,
                         },
                       }}
                     />
                   )
                 }
+                <VictoryScatter
+                  data={scores}
+                  width={width}
+                  height={height}
+                  x={(d) => new Date(d.date)}
+                  y={(d) => d.median}
+                  style={{
+                    data: {
+                      fill: greenA200,
+                      opacity: 0.6,
+                    },
+                  }}
+                  size={(d) => Math.PI * Math.pow(d.var, 2)}
+                />
+                <VictoryScatter
+                  data={scores}
+                  width={width}
+                  height={height}
+                  x={(d) => new Date(d.date)}
+                  y={(d) => d.amax}
+                  style={{
+                    data: {
+                      fill: amber400,
+                      opacity: 0.6,
+                    },
+                  }}
+                  size={(d) => Math.PI * Math.pow(d.var, 2)}
+                />
+                <VictoryScatter
+                  data={scores}
+                  width={width}
+                  height={height}
+                  x={(d) => new Date(d.date)}
+                  y={(d) => d.amin}
+                  style={{
+                    data: {
+                      fill: amber900,
+                      opacity: 0.6,
+                    },
+                  }}
+                  size={(d) => Math.PI * Math.pow(d.var, 2)}
+                />
                 <VictoryAxis
                   orientation="bottom"
                   standalone={false}
