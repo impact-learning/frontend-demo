@@ -38,15 +38,10 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
   }
 
   onResponseHistData(data) {
-<<<<<<< HEAD
     const {
       updatePrediction,
     } = this.props;
     updatePrediction(data);
-=======
-    // console.log(data)
-    console.log(data);
->>>>>>> master
   }
 
   genFuzzy(basePoints, variances) {
@@ -121,11 +116,7 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
 
 Prediction.propTypes = {
   onGetHistData: React.PropTypes.func,
-<<<<<<< HEAD
   updatePrediction: React.PropTypes.func,
-=======
-  updateTheScores: React.PropTypes.func,
->>>>>>> master
   scores: React.PropTypes.object,
 };
 
@@ -139,11 +130,7 @@ function mapDispatchToProps(dispatch) {
     onGetHistData: () => {
       socket.emit('get historical data');
     },
-<<<<<<< HEAD
     updatePrediction: (scores) => {
-=======
-    updateTheScores: (scores) => {
->>>>>>> master
       updateScores(scores);
     },
   };
