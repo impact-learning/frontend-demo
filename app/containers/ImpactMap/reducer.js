@@ -37,7 +37,7 @@ function impactMapReducer(state = initialState, action) {
 
     case ADD_VILLAGES: {
       const villages = action.villages.reduce((v, json) =>
-        v.set(`${json.township}${json.village}`, fromJS(json)), Map() // eslint-disable-line new-cap
+        v.set(`${json.township_village}`, fromJS(json)), Map() // eslint-disable-line new-cap
       );
       return state.update('villages', () => villages);
     }

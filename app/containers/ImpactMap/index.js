@@ -19,7 +19,7 @@ import Paper from 'material-ui/Paper';
 import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
 import isEmpty from 'lodash/isEmpty';
-// import inRange from 'lodash/inRange';
+import inRange from 'lodash/inRange';
 import L from 'leaflet';
 import { grey500, cyan500 } from 'material-ui/styles/colors';
 
@@ -45,10 +45,6 @@ import {
   currentXSelector,
 } from './selectors';
 
-import {
-  scoresSelector,
-} from '../Prediction/selectors';
-
 const brushHeight = 100;
 const projects = [
   '绿化扶平',
@@ -73,7 +69,7 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
 
   onSearchResponse(villages) {
     const { updateVillages } = this.props;
-    updateVillages(villages);
+    updateVillages(JSON.parse(villages));
   }
 
   prepareData() {
@@ -107,7 +103,6 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
       boundsForZoom,
       currentX,
       onFilterX,
-      scores,
     } = this.props;
 
     const center = [35.3174, 104.8535];
@@ -117,21 +112,18 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
       date: new Date(),
       score: 20,
       income: {},
-    }] : Object.keys(villages).map(key => ({
-      coordinates: villages[key].coordinates,
-      date: new Date(`${villages[key].year}`),
-      score: villages[key].scores.filter(s => {
-        if (isEmpty(currentX)) return true;
-        // return inRange(new Date(`${s.year}`, currentX[0], currentX[1]));
-        return s.year === currentX[1].getFullYear();
-      })[0].overall,
-      income: villages[key].average_income_per_capita.filter(i => {
-        if (isEmpty(currentX)) return true;
-        // return inRange(new Date(`${i.year}`, currentX[0], currentX[1]));
-        return i.year === currentX[1].getFullYear();
-      })[0].distribution,
+    }] : villages.map(v => ({
+      coordinates: v.coordinates,
+      date: new Date(v.date),
+      score: v.Score,
+      income: v.avg_income,
+      income5k: v['average_income-5k'],
+      income10k: v['average_income-5k_10k'],
+      income15k: v['average_income-10k_15k'],
+      income20k: v['average_income-15k_20k'],
+      income25k: v['average_income-20k_25k'],
+      income30k: v['average_income-25k'],
     }));
-
 
     return (
       <div className={styles.impactMap}>
@@ -149,7 +141,10 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
                   projectCoordinates={jinxiu}
                   onViewreset={this.props.onViewreset}
                   bounds={bounds}
-                  impactData={d}
+                  impactData={d.filter(i => {
+                    if (isEmpty(currentX)) return true;
+                    return inRange(i.date, currentX[0], currentX[1]);
+                  })}
                   boundsForZoom={boundsForZoom}
                 />
                 <Paper
@@ -222,7 +217,7 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
                   right: 20,
                   bottom: 20,
                 }}
-                data={scores}
+                data={d}
                 dateRange={[new Date(2010, 1, 1), new Date(2016, 7, 5)]}
                 filterX={x => onFilterX(x)}
               />
@@ -250,7 +245,6 @@ const mapStateToProps = createStructuredSelector({
   villages: villagesSelector(),
   boundsForZoom: boundsForZoomSelector(),
   currentX: currentXSelector(),
-  scores: scoresSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -270,7 +264,7 @@ function mapDispatchToProps(dispatch) {
     },
     updateVillages: (villages) => {
       dispatch(addVillages(villages));
-      const latLngs = Object.keys(villages).map(k => L.latLng(villages[k].coordinates[1], villages[k].coordinates[0]));
+      const latLngs = villages.map(k => L.latLng(k.coordinates[1], k.coordinates[0]));
       const bounds = L.latLngBounds(latLngs);
 
       dispatch(updateBoundsForZoom([

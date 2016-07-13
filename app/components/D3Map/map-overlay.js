@@ -69,10 +69,32 @@ class MapOverlay extends React.Component {
                 >
                   <Pie
                     data={
-                      Object.keys(d.income).map(k => ({
-                        name: k,
-                        value: Math.round(d.income[k] * 10000) / 100,
-                      }))
+                      [
+                        {
+                          name: '<5k',
+                          value: Math.round(d.income5k * 10000) / 100,
+                        },
+                        {
+                          name: '5k - 10k',
+                          value: Math.round(d.income10k * 10000) / 100,
+                        },
+                        {
+                          name: '10k - 15k',
+                          value: Math.round(d.income15k * 10000) / 100,
+                        },
+                        {
+                          name: '15k - 20k',
+                          value: Math.round(d.income20k * 10000) / 100,
+                        },
+                        {
+                          name: '>25k',
+                          value: Math.round(d.income25k * 10000) / 100,
+                        },
+                        {
+                          name: '>25k',
+                          value: Math.round(d.income30k * 10000) / 100,
+                        },
+                      ]
                     }
                     outerRadius={60}
                     fill={cyan500}
