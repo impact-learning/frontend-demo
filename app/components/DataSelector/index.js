@@ -23,6 +23,10 @@ import {
   select,
 } from 'd3-selection';
 
+import {
+  VictoryLine,
+} from 'victory';
+
 import styles from './styles.css';
 
 
@@ -92,6 +96,7 @@ class DataSelector extends React.Component { // eslint-disable-line react/prefer
       width,
       height,
       padding,
+      data,
     } = this.props;
     return (
       <div className={styles.dataSelector}>
@@ -99,6 +104,27 @@ class DataSelector extends React.Component { // eslint-disable-line react/prefer
           width={width}
           height={height}
         >
+          <g transform={`translate(${padding.left},${padding.top})`}>
+            <VictoryLine
+              data={data}
+              interpolation="monotoneX"
+              width={width}
+              height={height}
+              style={{
+                data: {
+                  stroke: '#00BCD4',
+                  strokeOpacity: 1.0,
+                  opacity: 1.0,
+                },
+              }}
+              scale={{
+                x: 'time',
+                y: 'linear',
+              }}
+              x={(d) => new Date(d.date)}
+              y={(d) => d.Score}
+            />
+          </g>
           <g
             transform={`translate(${padding.left},${padding.top})`}
           >
@@ -145,6 +171,7 @@ DataSelector.propTypes = {
   height: React.PropTypes.number,
   dateRange: React.PropTypes.array,
   filterX: React.PropTypes.func,
+  data: React.PropTypes.array,
 };
 
 export default DataSelector;

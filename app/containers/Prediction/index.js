@@ -11,8 +11,22 @@ import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
 import { createStructuredSelector } from 'reselect';
 
+import Slider from 'material-ui/Slider';
 import {
-  VictoryChart,
+  List,
+  ListItem,
+} from 'material-ui/List';
+
+import {
+  timeMonth,
+} from 'd3-time';
+
+import {
+  min,
+  max,
+} from 'd3-array';
+
+import {
   VictoryLine,
   VictoryAxis,
 } from 'victory';
@@ -41,7 +55,8 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
     const {
       updatePrediction,
     } = this.props;
-    updatePrediction(data);
+    const scores = JSON.parse(data);
+    updatePrediction(scores);
   }
 
   genFuzzy(basePoints, variances) {
@@ -51,8 +66,8 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
       const fp1 = [];
       basePoints.forEach((b, idx) => {
         fp1.push({
-          x: b.x,
-          y: b.y + b.y * (variances[idx] * i / intensity),
+          x: new Date(b.date),
+          y: b.Score,
         });
       });
       fuzzyPoints.push(fp1);
@@ -67,20 +82,29 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
 
     const variances = [0, 0, 0, 0, 0, 0, 0, 0.1, 0.17, 0.2, 0.3];
     const data = this.genFuzzy(scores, variances);
+    const height = 450;
+    const dates = scores.map(s => new Date(s.date));
+    const scoreValues = scores.map(s => s.Score);
+    const minDate = min(dates);
+    const maxDate = max(dates);
+
     return (
       <div className={styles.prediction}>
         <ContainerDimensions>
           {
             ({ width }) =>
-              <VictoryChart
+              <svg
                 width={width}
-                height={450}
+                height={height}
               >
                 {
-                  data.map(d =>
+                  data.map((d, i) =>
                     <VictoryLine
+                      key={i}
                       data={d}
                       interpolation="monotoneX"
+                      width={width}
+                      height={height}
                       style={{
                         data: {
                           stroke: '#00BCD4',
@@ -94,20 +118,48 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
                 <VictoryAxis
                   orientation="bottom"
                   standalone={false}
+                  label="Date"
+                  width={width}
+                  height={height}
+                  scale="time"
+                  tickValues={
+                    timeMonth.every(6).range(minDate, maxDate)
+                  }
                 />
                 <VictoryAxis
-                  dependentAxis
+                  dependent
                   standalone={false}
                   orientation="left"
+                  width={width}
+                  height={height}
+                  domain={[min(scoreValues), max(scoreValues)]}
                 />
                 <VictoryAxis
                   dependentAxis
                   standalone={false}
                   orientation="right"
+                  width={width}
+                  height={height}
+                  domain={[min(scoreValues), max(scoreValues)]}
                 />
-              </VictoryChart>
+              </svg>
           }
         </ContainerDimensions>
+        <List>
+          <ListItem
+            disabled
+            primaryText="Donation Amount"
+            leftIcon={
+              <Slider
+                style={{
+                  width: 200,
+                  paddingLeft: 50,
+                }}
+                axis="x"
+              />
+            }
+          />
+        </List>
       </div>
     );
   }
@@ -117,7 +169,7 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
 Prediction.propTypes = {
   onGetHistData: React.PropTypes.func,
   updatePrediction: React.PropTypes.func,
-  scores: React.PropTypes.object,
+  scores: React.PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -131,7 +183,7 @@ function mapDispatchToProps(dispatch) {
       socket.emit('get historical data');
     },
     updatePrediction: (scores) => {
-      updateScores(scores);
+      dispatch(updateScores(scores));
     },
   };
 }

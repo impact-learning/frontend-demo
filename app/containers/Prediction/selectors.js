@@ -22,7 +22,7 @@ const selectPrediction = () => createSelector(
 
 const scoresSelector = () => createSelector(
   selectPredictionDomain(),
-  (prediction) => prediction.get('scores').toJS(),
+  (prediction) => prediction.get('scores').toList().toJS(),
 );
 
 export default selectPrediction;

@@ -45,7 +45,16 @@ import {
   currentXSelector,
 } from './selectors';
 
+import {
+  scoresSelector,
+} from '../Prediction/selectors';
+
 const brushHeight = 100;
+const projects = [
+  '绿化扶平',
+  '金秀',
+  'CGF',
+];
 
 class ImpactMap extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
@@ -56,6 +65,10 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
 
   componentDidMount() {
     socket.on('search response', this.onSearchResponse);
+    const { updateVillages, villages } = this.props;
+    if (villages.length > 2) {
+      updateVillages(villages);
+    }
   }
 
   onSearchResponse(villages) {
@@ -94,14 +107,11 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
       boundsForZoom,
       currentX,
       onFilterX,
+      scores,
     } = this.props;
 
     const center = [35.3174, 104.8535];
-    const projects = [
-      '绿化扶平',
-      '金秀',
-      'CGF',
-    ];
+
     const d = isEmpty(villages) ? [{
       coordinates: [110.18394058186335, 24.13800001458207],
       date: new Date(),
@@ -212,6 +222,7 @@ class ImpactMap extends React.Component { // eslint-disable-line react/prefer-st
                   right: 20,
                   bottom: 20,
                 }}
+                data={scores}
                 dateRange={[new Date(2010, 1, 1), new Date(2016, 7, 5)]}
                 filterX={x => onFilterX(x)}
               />
@@ -226,6 +237,7 @@ ImpactMap.propTypes = {
   onViewreset: React.PropTypes.func,
   bounds: React.PropTypes.array,
   villages: React.PropTypes.object,
+  scores: React.PropTypes.array,
   boundsForZoom: React.PropTypes.array,
   onSearch: React.PropTypes.func,
   updateVillages: React.PropTypes.func,
@@ -238,6 +250,7 @@ const mapStateToProps = createStructuredSelector({
   villages: villagesSelector(),
   boundsForZoom: boundsForZoomSelector(),
   currentX: currentXSelector(),
+  scores: scoresSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -249,9 +262,11 @@ function mapDispatchToProps(dispatch) {
       dispatch(fitToBounds(toD3Path(map).bounds(provincesGeo)));
     },
     onSearch: (county) => {
-      socket.emit('search county', {
-        county,
-      });
+      if (projects.indexOf(county) >= 0) {
+        socket.emit('search county', {
+          county,
+        });
+      }
     },
     updateVillages: (villages) => {
       dispatch(addVillages(villages));
