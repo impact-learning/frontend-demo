@@ -21,7 +21,7 @@ const boundsSelector = () => createSelector(
 
 const villagesSelector = () => createSelector(
   impactMapSelector(),
-  (impactMap) => impactMap.get('villages').toJS(),
+  (impactMap) => impactMap.get('villages').toList().toJS(),
 );
 
 

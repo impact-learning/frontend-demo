@@ -22,11 +22,22 @@ const selectPrediction = () => createSelector(
 
 const scoresSelector = () => createSelector(
   selectPredictionDomain(),
-  (prediction) => prediction.get('scores').toJS(),
+  (prediction) => prediction.get('scores').toList().toJS(),
+);
+
+const donationSelector = () => createSelector(
+  selectPredictionDomain(),
+  (prediction) => prediction.get('donation'),
+);
+const yearsSelector = () => createSelector(
+  selectPredictionDomain(),
+  (prediction) => prediction.get('years'),
 );
 
 export default selectPrediction;
 export {
   selectPredictionDomain,
   scoresSelector,
+  donationSelector,
+  yearsSelector,
 };

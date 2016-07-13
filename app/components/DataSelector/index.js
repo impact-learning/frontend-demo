@@ -16,12 +16,21 @@ import {
 } from 'd3-time';
 
 import {
+  min,
+  max,
+} from 'd3-array';
+
+import {
   brushX,
 } from 'd3-brush';
 import {
   event as d3Event,
   select,
 } from 'd3-selection';
+
+import {
+  VictoryLine,
+} from 'victory';
 
 import styles from './styles.css';
 
@@ -34,6 +43,7 @@ class DataSelector extends React.Component { // eslint-disable-line react/prefer
       height,
       padding,
       dateRange,
+      data,
     } = props;
 
     this.brushEnded = this.brushEnded.bind(this);
@@ -42,7 +52,13 @@ class DataSelector extends React.Component { // eslint-disable-line react/prefer
 
     this.contentHeight = height - padding.top - padding.bottom;
 
-    this.x = scaleTime().domain(dateRange)
+    let theDateRange = dateRange;
+    if (data.length > 1) {
+      const dates = data.map(d => d.date);
+      theDateRange = [min(dates), max(dates)];
+    }
+
+    this.x = scaleTime().domain(theDateRange)
     .rangeRound([0, this.contentWidth]);
 
     this.brush = brushX()
@@ -92,13 +108,47 @@ class DataSelector extends React.Component { // eslint-disable-line react/prefer
       width,
       height,
       padding,
+      data,
     } = this.props;
+
     return (
       <div className={styles.dataSelector}>
         <svg
           width={width}
           height={height}
         >
+          <g transform={`translate(${padding.left},${padding.top})`}>
+            <VictoryLine
+              data={data}
+              interpolation="monotoneX"
+              width={width}
+              height={height}
+              domain={
+                {
+                  y: [27.0, 35.0],
+                }
+              }
+              padding={{
+                top: 5,
+                bottom: 50,
+                left: 0,
+                right: 40,
+              }}
+              style={{
+                data: {
+                  stroke: '#00BCD4',
+                  strokeOpacity: 1.0,
+                  opacity: 1.0,
+                },
+              }}
+              scale={{
+                x: 'time',
+                y: 'linear',
+              }}
+              x={(d) => d.date}
+              y={(d) => d.score}
+            />
+          </g>
           <g
             transform={`translate(${padding.left},${padding.top})`}
           >
@@ -145,6 +195,7 @@ DataSelector.propTypes = {
   height: React.PropTypes.number,
   dateRange: React.PropTypes.array,
   filterX: React.PropTypes.func,
+  data: React.PropTypes.array,
 };
 
 export default DataSelector;
