@@ -22,6 +22,10 @@ import {
 } from 'd3-time';
 
 import {
+  format
+} from 'd3-format';
+
+import {
   min,
   max,
 } from 'd3-array';
@@ -34,11 +38,15 @@ import {
 
 import {
   updateScores,
+  updateDonation,
+  updateYears,
 } from './actions';
 
 
 import {
   scoresSelector,
+  donationSelector,
+  yearsSelector,
 } from './selectors';
 
 export class Prediction extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -79,6 +87,10 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
   render() {
     const {
       scores,
+      donation,
+      years,
+      onChangeDonation,
+      onChangeYears,
     } = this.props;
 
     const variances = [0, 0, 0, 0, 0, 0, 0, 0.1, 0.17, 0.2, 0.3];
@@ -191,7 +203,7 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
         <List>
           <ListItem
             disabled
-            primaryText="Donation Amount"
+            primaryText={`Donation Amount ${format('$,.0f')(donation)}`}
             leftIcon={
               <Slider
                 style={{
@@ -199,6 +211,29 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
                   paddingLeft: 50,
                 }}
                 axis="x"
+                min={0}
+                max={100000000}
+                defaultValue={donation}
+                step={10000}
+                onChange={onChangeDonation}
+              />
+            }
+          />
+          <ListItem
+            disabled
+            primaryText={`Predict to ${years}`}
+            leftIcon={
+              <Slider
+                style={{
+                  width: 200,
+                  paddingLeft: 50,
+                }}
+                axis="x"
+                min={(new Date()).getFullYear()}
+                max={(new Date()).getFullYear() + 5}
+                defaultValue={years}
+                step={1}
+                onChange={onChangeYears}
               />
             }
           />
@@ -213,10 +248,16 @@ Prediction.propTypes = {
   onGetHistData: React.PropTypes.func,
   updatePrediction: React.PropTypes.func,
   scores: React.PropTypes.array,
+  donation: React.PropTypes.number,
+  years: React.PropTypes.number,
+  onChangeDonation: React.PropTypes.func,
+  onChangeYears: React.PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   scores: scoresSelector(),
+  donation: donationSelector(),
+  years: yearsSelector(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -227,6 +268,12 @@ function mapDispatchToProps(dispatch) {
     },
     updatePrediction: (scores) => {
       dispatch(updateScores(scores));
+    },
+    onChangeDonation: (e, value) => {
+      dispatch(updateDonation(value));
+    },
+    onChangeYears: (e, value) => {
+      dispatch(updateYears(value));
     },
   };
 }
