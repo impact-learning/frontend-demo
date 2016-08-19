@@ -10,7 +10,7 @@ import styles from './styles.css';
 import ContainerDimensions from 'react-container-dimensions';
 import socket from 'utils/socketio';
 import { createStructuredSelector } from 'reselect';
-import { greenA700, greenA400, greenA200, amber900, amber400, amber700, cyan500 } from 'material-ui/styles/colors';
+import { greenA200, amber900, amber400 } from 'material-ui/styles/colors';
 import Slider from 'material-ui/Slider';
 import {
   List,
@@ -22,7 +22,7 @@ import {
 } from 'd3-time';
 
 import {
-  format
+  format,
 } from 'd3-format';
 
 import {
@@ -68,12 +68,12 @@ export class Prediction extends React.Component { // eslint-disable-line react/p
     updatePrediction(scores);
   }
 
-  genFuzzy(basePoints, variances) {
+  genFuzzy(basePoints) {
     const intensity = 30;
     const fuzzyPoints = [];
     for (let i = 1; i <= intensity; i++) {
       const fp1 = [];
-      basePoints.forEach((b, idx) => {
+      basePoints.forEach((b) => {
         fp1.push({
           x: new Date(b.date),
           y: b.Score,
