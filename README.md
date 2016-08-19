@@ -1,5 +1,5 @@
 # frontend-demo
-Data visualization demo (frontend), it's based on [react-boilerplate](https://github.com/mxstbr/react-boilerplate).
+Data visualization demo (frontend), it's based on [react-boilerplate](https://github.com/mxstbr/react-boilerplate). It demonstrates the feature of visualizing the social impact using interactive map with time-windowed data selection function. The data is fed from the backend service using websocket as the communication mean.
 
 ## Core libs used for this project
 
@@ -14,7 +14,10 @@ Data visualization demo (frontend), it's based on [react-boilerplate](https://gi
 
 ## Screenshots
 
+Impact Map
 ![Impact Map](IMG_5742.jpg)
+
+Prediction
 ![Prediction](IMG_5743.jpg)
 
 # How to Start
