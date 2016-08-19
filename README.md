@@ -1,5 +1,21 @@
 # frontend-demo
-Data visualization demo
+Data visualization demo (frontend), it's based on [react-boilerplate](https://github.com/mxstbr/react-boilerplate).
+
+## Core libs used for this project
+
++ [React.js](https://facebook.github.io/react/)
++ [D3.js](https://d3js.org/)
++ [leaflet.js](http://leafletjs.com/)
++ [socketio.client](https://github.com/socketio/socket.io)
++ [redux](https://github.com/reactjs/redux)
++ [immutable](https://github.com/facebook/immutable-js)
++ others (please see [package.json](package.json))
+
+
+## Screenshots
+
+![Impact Map](IMG_5742.jpg)
+![Prediction](IMG_5743.jpg)
 
 # How to Start
 
@@ -10,19 +26,6 @@ $ npm run start
 ```
 
 Starts the development server running on `http://localhost:3000`
-
-## Cleaning
-
-```Shell
-$ npm run clean
-```
-
-Deletes the example app, replacing it with the smallest amount of boilerplate
-code necessary to start writing your app!
-
-> Note: This command is self-destructive, once you've run it you cannot run it
-again. This is for your own safety, so you can't delete portions of your project
-irreversibly by accident.
 
 ## Generators
 
